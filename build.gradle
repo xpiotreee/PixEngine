@@ -1,0 +1,74 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'PixEngine'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+project.ext.lwjglVersion = "3.2.3"
+project.ext.jomlVersion = "1.9.20"
+project.ext.gsonVersion = "2.8.6"
+project.ext.nettyVersion = "4.1.45.Final"
+
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': 'com.piotreee.game.Main'
+        )
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+
+    implementation "io.netty:netty-all:${nettyVersion}"
+
+    implementation "org.lwjgl:lwjgl"
+    implementation "org.lwjgl:lwjgl-assimp"
+    implementation "org.lwjgl:lwjgl-bgfx"
+    implementation "org.lwjgl:lwjgl-glfw"
+    implementation "org.lwjgl:lwjgl-nanovg"
+    implementation "org.lwjgl:lwjgl-nuklear"
+    implementation "org.lwjgl:lwjgl-openal"
+    implementation "org.lwjgl:lwjgl-opengl"
+    implementation "org.lwjgl:lwjgl-par"
+    implementation "org.lwjgl:lwjgl-stb"
+    implementation "org.lwjgl:lwjgl-vulkan"
+
+    runtimeOnly "org.lwjgl:lwjgl::natives-windows"
+    runtimeOnly "org.lwjgl:lwjgl-assimp::natives-windows"
+    runtimeOnly "org.lwjgl:lwjgl-bgfx::natives-windows"
+    runtimeOnly "org.lwjgl:lwjgl-glfw::natives-windows"
+    runtimeOnly "org.lwjgl:lwjgl-nanovg::natives-windows"
+    runtimeOnly "org.lwjgl:lwjgl-nuklear::natives-windows"
+    runtimeOnly "org.lwjgl:lwjgl-openal::natives-windows"
+    runtimeOnly "org.lwjgl:lwjgl-opengl::natives-windows"
+    runtimeOnly "org.lwjgl:lwjgl-par::natives-windows"
+    runtimeOnly "org.lwjgl:lwjgl-stb::natives-windows"
+
+    runtimeOnly "org.lwjgl:lwjgl::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-assimp::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-bgfx::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-glfw::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-nanovg::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-nuklear::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-openal::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-opengl::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-par::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-stb::natives-linux"
+
+    implementation "org.joml:joml:${jomlVersion}"
+    implementation "com.google.code.gson:gson:${gsonVersion}"
+}
