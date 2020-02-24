@@ -14,18 +14,24 @@ import org.joml.Vector2f;
 import java.io.Serializable;
 
 public class TestGameObject implements GameObject, Renderable, Serializable {
-    private static int IDs = 0;
+    private transient static int IDs = 0;
     private int id;
     private Transform transform;
     private Vector2f velocity;
-    private Sprite sprite;
+    private transient Sprite sprite;
 
-    public TestGameObject() {
+    public TestGameObject(Transform transform, Vector2f velocity) {
         id = IDs++;
-        this.transform = new Transform();
-        this.velocity = new Vector2f(0, 0);
+        this.transform = transform;
+        this.velocity = velocity;
         this.sprite = new Sprite(transform, Resources.getTexture("test"));
     }
+//    public TestGameObject() {
+//        id = IDs++;
+//        this.transform = new Transform();
+//        this.velocity = new Vector2f(0, 0);
+//        this.sprite = new Sprite(transform, Resources.getTexture("test"));
+//    }
 
     @Override
     public void update(double delta, Input input) {
@@ -46,6 +52,10 @@ public class TestGameObject implements GameObject, Renderable, Serializable {
 
     @Override
     public void render(Shader shader, Camera camera, Matrix4f view) {
+        if (sprite == null) {
+            sprite = new Sprite(transform, Resources.getTexture("test"));
+        }
+
         sprite.render(shader, camera, view);
     }
 

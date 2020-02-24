@@ -3,7 +3,9 @@ package com.piotreee.pixengine.objects;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
-public class Transform {
+import java.io.Serializable;
+
+public class Transform implements Serializable {
     public Vector2f position;
     public Vector2f scale;
     public float rotation;
