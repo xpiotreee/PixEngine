@@ -13,7 +13,7 @@ public class ClientGameObject extends ServerGameObject implements Renderable {
     private Sprite sprite;
 
     public ClientGameObject(int id, Transform transform, Vector2f velocity, Sprite sprite) {
-        super(id, transform, velocity);
+        super(id, transform, velocity, "");
         this.sprite = sprite;
     }
 

@@ -1,5 +1,6 @@
 package com.piotreee.pixengine;
 
+import com.piotreee.pixengine.io.Input;
 import com.piotreee.pixengine.io.Window;
 import com.piotreee.pixengine.objects.Scene;
 import com.piotreee.pixengine.util.Resources;
@@ -124,6 +125,10 @@ public class LwjglApplication {
 
     public Window getWindow() {
         return window;
+    }
+
+    public Input getInput() {
+        return window.getInput();
     }
 
     public int getFPS() {

@@ -1,6 +1,5 @@
 package com.piotreee.pixengine.gui;
 
-import com.piotreee.pixengine.io.Input;
 import com.piotreee.pixengine.io.Window;
 import com.piotreee.pixengine.objects.Updatable;
 import com.piotreee.pixengine.render.Camera;
@@ -33,7 +32,7 @@ public class Gui implements Updatable {
         }
     }
 
-    public void update(double delta, Input input) {
+    public void update(double delta) {
         if (window.hasResized()) {
             camera.setProjection(window.getWidth(), window.getHeight());
             guiAlignment.fixAlignments();
@@ -43,7 +42,7 @@ public class Gui implements Updatable {
         }
 
         for (int i = 0; i < updatablesSize; i++) {
-            updatables.get(i).update(delta, input);
+            updatables.get(i).update(delta);
         }
     }
 

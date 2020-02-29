@@ -1,6 +1,5 @@
 package com.piotreee.pixengine.objects;
 
-import com.piotreee.pixengine.io.Input;
 import com.piotreee.pixengine.render.Camera;
 import com.piotreee.pixengine.render.Renderable;
 import com.piotreee.pixengine.render.Shader;
@@ -31,7 +30,7 @@ public class TestObject implements GameObject, Renderable {
     }
 
     @Override
-    public void update(double delta, Input input) {
+    public void update(double delta) {
 
     }
 

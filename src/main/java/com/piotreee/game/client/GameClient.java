@@ -2,6 +2,7 @@ package com.piotreee.game.client;
 
 import com.piotreee.game.objects.client.ClientGameObject;
 import com.piotreee.game.packets.AddGameObjectPacket;
+import com.piotreee.game.packets.SetPlayerPacket;
 import com.piotreee.game.packets.TestPacket;
 import com.piotreee.game.packets.UpdateGameObjectPacket;
 import com.piotreee.game.scenes.Game;
@@ -37,7 +38,28 @@ public class GameClient extends Client {
             public void on(ChannelHandlerContext ctx, AddGameObjectPacket packet) {
                 addGameObject(packet);
             }
+        }, new PacketListener<SetPlayerPacket>(SetPlayerPacket.class) {
+            @Override
+            public void on(ChannelHandlerContext ctx, SetPlayerPacket packet) {
+                game.setPlayer(getGameObject(packet.getGameObjectId()));
+            }
         });
+    }
+
+    private ClientGameObject getGameObject(int id) {
+        List<Updatable> updatables = game.getUpdatables();
+        int size = game.getUpdatablesSize();
+        for (int i = 0; i < size; i++) {
+            Updatable updatable = updatables.get(i);
+            if (updatable instanceof ClientGameObject) {
+                ClientGameObject gameObject = (ClientGameObject) updatable;
+                if (gameObject.getId() == id) {
+                    return gameObject;
+                }
+            }
+        }
+
+        return null;
     }
 
     private void addGameObject(AddGameObjectPacket packet) {
@@ -59,8 +81,6 @@ public class GameClient extends Client {
             Updatable updatable = updatables.get(i);
             if (updatable instanceof ClientGameObject) {
                 ClientGameObject gameObject = (ClientGameObject) updatable;
-                System.out.println("gameobject id: " + gameObject.getId());
-                System.out.println("packet gameobject id: " + packet.getGameObjectId());
                 if (gameObject.getId() == packet.getGameObjectId()) {
                     gameObject.getTransform().position.set(packet.getPosX(), packet.getPosY());
                     gameObject.getTransform().setRotation(packet.getRotation());

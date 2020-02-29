@@ -1,8 +1,6 @@
 package com.piotreee.game;
 
-import com.piotreee.game.packets.AddGameObjectPacket;
-import com.piotreee.game.packets.TestPacket;
-import com.piotreee.game.packets.UpdateGameObjectPacket;
+import com.piotreee.game.packets.*;
 import com.piotreee.game.scenes.MainMenu;
 import com.piotreee.game.server.GameServer;
 import com.piotreee.pixengine.LwjglApplication;
@@ -23,5 +21,7 @@ public class Main {
         PacketRegistry.registerPacket(0, TestPacket.class);
         PacketRegistry.registerPacket(1, UpdateGameObjectPacket.class);
         PacketRegistry.registerPacket(2, AddGameObjectPacket.class);
+        PacketRegistry.registerPacket(3, InputPacket.class);
+        PacketRegistry.registerPacket(4, SetPlayerPacket.class);
     }
 }

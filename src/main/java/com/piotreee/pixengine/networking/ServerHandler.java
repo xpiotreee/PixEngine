@@ -59,6 +59,17 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
+    public void sendAllExcept(Packet packet, Channel except) {
+        byte[] data = packet.writeData();
+        for (Channel channel : channels) {
+            if (channel.equals(except)) {
+                continue;
+            }
+
+            channel.writeAndFlush(data);
+        }
+    }
+
     public void addListeners(PacketListener... packetListeners) {
         packetListenersSize += packetListeners.length;
         this.packetListeners.addAll(Arrays.asList(packetListeners));

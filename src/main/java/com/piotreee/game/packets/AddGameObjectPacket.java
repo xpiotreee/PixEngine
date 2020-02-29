@@ -11,7 +11,7 @@ public class AddGameObjectPacket extends UpdateGameObjectPacket {
     private String spriteName;
 
     public AddGameObjectPacket(ServerGameObject gameObject) {
-        this(gameObject.getId(), gameObject.getTransform(), gameObject.getVelocity().x, gameObject.getVelocity().y, "test");
+        this(gameObject.getId(), gameObject.getTransform(), gameObject.getVelocity().x, gameObject.getVelocity().y, gameObject.getSpriteName());
     }
 
     public AddGameObjectPacket(int id, Transform transform, float velX, float velY, String spriteName) {
@@ -59,7 +59,6 @@ public class AddGameObjectPacket extends UpdateGameObjectPacket {
         super.readData(buffer);
         this.scaleX = buffer.getFloat();
         this.scaleY = buffer.getFloat();
-
         int size = buffer.getInt();
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < size; i++) {

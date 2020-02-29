@@ -36,9 +36,9 @@ public abstract class GameScene implements Scene {
     @Override
     public void update(double delta, Input input) {
         camera.update();
-        gui.update(delta, input);
+        gui.update(delta);
         for (int i = 0; i < updatablesSize; i++) {
-            updatables.get(i).update(delta, input);
+            updatables.get(i).update(delta);
         }
     }
 

@@ -37,11 +37,11 @@ public class Camera {
             addPosition(0, 10f);
         }
 
-        if (window.getInput().isKeyDown(GLFW_KEY_A)) {
-            rotate(-0.01f);
-        } else if (window.getInput().isKeyDown(GLFW_KEY_D)) {
-            rotate(0.01f);
-        }
+//        if (window.getInput().isKeyDown(GLFW_KEY_A)) {
+//            rotate(-0.01f);
+//        } else if (window.getInput().isKeyDown(GLFW_KEY_D)) {
+//            rotate(0.01f);
+//        }
     }
 
     public void setProjection(int width, int height) {
@@ -67,7 +67,7 @@ public class Camera {
     }
 
     public void setPosition(Vector2f position) {
-        transform.position = position;
+        transform.position.set(position);
     }
 
     public Matrix4f getUntransformedProjection() {

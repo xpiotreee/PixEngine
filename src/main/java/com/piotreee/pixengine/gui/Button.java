@@ -1,5 +1,6 @@
 package com.piotreee.pixengine.gui;
 
+import com.piotreee.pixengine.LwjglApplication;
 import com.piotreee.pixengine.io.Input;
 import com.piotreee.pixengine.math.Rectangle;
 import com.piotreee.pixengine.objects.Sheet;
@@ -45,7 +46,8 @@ public class Button extends Panel implements Updatable {
         this.callback = callback;
     }
 
-    public void update(double delta, Input input) {
+    public void update(double delta) {
+        Input input = LwjglApplication.INSTANCE.getInput();
         if (collider.contains(input.getMousePos())) {
             selectedState = STATE_SELECTED;
             if (input.isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT) ||
