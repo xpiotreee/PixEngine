@@ -1,6 +1,5 @@
 package com.piotreee.pixengine.networking;
 
-import com.google.gson.Gson;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,7 +17,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     private List<PacketListener> packetListeners = new ArrayList<>();
     private int packetListenersSize = 0;
     private ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-    private Gson gson = new Gson();
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -31,13 +29,16 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        if (msg instanceof String) {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (msg instanceof byte[]) {
+            byte[] bytes = (byte[]) msg;
+
+            Packet packet = new Packet(bytes);
             for (int i = 0; i < packetListenersSize; i++) {
-                Packet packet = gson.fromJson((String) msg, Packet.class);
+                Class<? extends Packet> packetClass = PacketRegistry.getPacketClass(packet.getId());
                 PacketListener packetListener = packetListeners.get(i);
-                if (packetListener.getType().isAssignableFrom(packet.getType())) {
-                    packetListener.on(ctx, packet.getObject());
+                if (packetListener.getType().isAssignableFrom(packetClass)) {
+                    packetListener.on(ctx, packetClass.getConstructor(byte[].class).newInstance(bytes));
                 }
             }
         }
@@ -51,10 +52,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         ctx.close();
     }
 
-    public void sendAll(Object object) {
-        String msg = gson.toJson(new Packet(object.getClass(), object));
+    public void sendAll(Packet packet) {
+        byte[] data = packet.writeData();
         for (Channel channel : channels) {
-            channel.writeAndFlush(msg);
+            channel.writeAndFlush(data);
         }
     }
 

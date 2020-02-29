@@ -61,8 +61,8 @@ public class Server implements Runnable {
         }
     }
 
-    public void sendAll(Object o) {
-        handler.sendAll(o);
+    public void sendAll(Packet packet) {
+        handler.sendAll(packet);
     }
 
     public void addListeners(PacketListener... packetListeners) {

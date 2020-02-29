@@ -1,29 +1,40 @@
 package com.piotreee.game.server;
 
-import com.piotreee.game.objects.TestGameObject;
-import com.piotreee.game.packets.UpdatePacket;
+import com.piotreee.game.objects.server.ServerGameObject;
+import com.piotreee.game.packets.AddGameObjectPacket;
+import com.piotreee.game.packets.UpdateGameObjectPacket;
+import com.piotreee.pixengine.networking.PacketListener;
 import com.piotreee.pixengine.networking.Server;
-import com.piotreee.pixengine.objects.GameObject;
 import com.piotreee.pixengine.objects.Transform;
+import io.netty.channel.ChannelHandlerContext;
 import org.joml.Vector2f;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 public class GameServer extends Server {
-    private List<TestGameObject> gameObjects = new ArrayList<>();
+    private static int IDs = 0;
+    private List<ServerGameObject> gameObjects = new ArrayList<>();
     private int gameObjectsSize = 0;
 
     private boolean running = true;
 
     public GameServer(int port) {
         super(port);
-        gameObjects.add(new TestGameObject(new Transform(), new Vector2f()));
+        gameObjects.add(new ServerGameObject(IDs++, new Transform(new Vector2f()), new Vector2f()));
         gameObjectsSize++;
-        gameObjects.add(new TestGameObject(new Transform(new Vector2f(2, 0)), new Vector2f()));
+        gameObjects.add(new ServerGameObject(IDs++, new Transform(new Vector2f(3, -1), new Vector2f(2, 1), 45), new Vector2f()));
         gameObjectsSize++;
+
+        addListeners(new PacketListener<Object>(Object.class) {
+            @Override
+            public void active(ChannelHandlerContext ctx) {
+                for (int i = 0; i < gameObjectsSize; i++) {
+                    ctx.writeAndFlush(new AddGameObjectPacket(gameObjects.get(i)).writeData());
+                }
+            }
+        });
+
     }
 
     public void run() {
@@ -49,14 +60,19 @@ public class GameServer extends Server {
     }
 
     private void update(double delta) {
-        gameObjects.get(0).getTransform().rotation += 0.01f;
-        gameObjects.get(1).getTransform().rotation -= 0.01f;
+        gameObjects.get(0).getTransform().rotation += 0.01f * delta;
+        gameObjects.get(1).getTransform().rotation -= 0.01f * delta;
 
-        sendAll(new UpdatePacket(new Date().toString(), String.valueOf(handler.getChannelsSize()), gameObjects));
+        for (int i = 0; i < gameObjectsSize; i++) {
+            ServerGameObject gameObject = gameObjects.get(i);
+            gameObject.update(delta, null);
+            sendAll(new UpdateGameObjectPacket(gameObject));
+        }
     }
 
     public void stop() {
         running = false;
         super.stop();
     }
+
 }

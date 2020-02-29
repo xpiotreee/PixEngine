@@ -9,7 +9,6 @@ import com.piotreee.pixengine.io.Input;
 import com.piotreee.pixengine.io.Window;
 import com.piotreee.pixengine.objects.GameScene;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_TAB;
 
 public class Game extends GameScene {
@@ -32,10 +31,6 @@ public class Game extends GameScene {
         super.update(delta, input);
         if (input.isKeyPressed(GLFW_KEY_TAB)) {
             LwjglApplication.INSTANCE.loadScene(MainMenu.class);
-        }
-
-        if (input.isKeyPressed(GLFW_KEY_SPACE)) {
-            client.send("papierz 2137");
         }
     }
 

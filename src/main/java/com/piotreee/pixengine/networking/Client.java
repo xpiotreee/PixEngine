@@ -1,8 +1,10 @@
 package com.piotreee.pixengine.networking;
 
-import com.google.gson.Gson;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -11,11 +13,9 @@ import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 
 public class Client implements Runnable {
-    private Gson gson;
     private ClientHandler handler;
     private EventLoopGroup workerGroup;
     private Channel channel;
-    private ChannelFuture lastWriteFuture;
     private String host;
     private int port;
 
@@ -56,8 +56,8 @@ public class Client implements Runnable {
         }
     }
 
-    public void send(Object o) {
-        lastWriteFuture = channel.writeAndFlush(gson.toJson(new Packet(o.getClass(), o)));
+    public void send(Packet packet) {
+        channel.writeAndFlush(packet.writeData());
     }
 
     public void addListeners(PacketListener... packetListeners) {

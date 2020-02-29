@@ -1,6 +1,5 @@
 package com.piotreee.pixengine.networking;
 
-import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -11,7 +10,6 @@ import java.util.List;
 public class ClientHandler extends ChannelInboundHandlerAdapter {
     private List<PacketListener> packetListeners;
     private int packetListenersSize = 0;
-    private Gson gson = new Gson();
 
     public ClientHandler() {
         this.packetListeners = new ArrayList<>();
@@ -26,12 +24,14 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof String) {
+        if (msg instanceof byte[]) {
+            byte[] bytes = (byte[]) msg;
+            Packet packet = new Packet(bytes);
             for (int i = 0; i < packetListenersSize; i++) {
-                Packet packet = gson.fromJson((String) msg, Packet.class);
+                Class<? extends Packet> packetClass = PacketRegistry.getPacketClass(packet.getId());
                 PacketListener packetListener = packetListeners.get(i);
-                if (packetListener.getType().isAssignableFrom(packet.getType())) {
-                    packetListener.on(ctx, packet.getObject());
+                if (packetListener.getType().isAssignableFrom(packetClass)) {
+                    packetListener.on(ctx, packetClass.getConstructor(byte[].class).newInstance(bytes));
                 }
             }
         }
