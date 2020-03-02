@@ -2,7 +2,9 @@ package com.piotreee.game.scenes;
 
 import com.piotreee.game.client.GameClient;
 import com.piotreee.game.objects.client.ClientGameObject;
+import com.piotreee.game.objects.server.ServerGameObject;
 import com.piotreee.game.packets.InputPacket;
+import com.piotreee.game.packets.RemoveGameObjectPacket;
 import com.piotreee.game.server.GameServer;
 import com.piotreee.pixengine.LwjglApplication;
 import com.piotreee.pixengine.gui.Alignment;
@@ -10,6 +12,7 @@ import com.piotreee.pixengine.gui.Text;
 import com.piotreee.pixengine.io.Input;
 import com.piotreee.pixengine.io.Window;
 import com.piotreee.pixengine.objects.GameScene;
+import com.piotreee.pixengine.objects.Updatable;
 
 import static org.lwjgl.glfw.GLFW.*;
 

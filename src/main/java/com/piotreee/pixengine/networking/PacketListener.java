@@ -13,6 +13,10 @@ public class PacketListener<T> {
 
     }
 
+    public void inActive(ChannelHandlerContext ctx) {
+
+    }
+
     public void on(ChannelHandlerContext ctx, T t) {
 
     }

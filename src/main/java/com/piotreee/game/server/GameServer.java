@@ -2,10 +2,7 @@ package com.piotreee.game.server;
 
 import com.piotreee.game.objects.server.ServerGameObject;
 import com.piotreee.game.objects.server.ServerPlayer;
-import com.piotreee.game.packets.AddGameObjectPacket;
-import com.piotreee.game.packets.InputPacket;
-import com.piotreee.game.packets.SetPlayerPacket;
-import com.piotreee.game.packets.UpdateGameObjectPacket;
+import com.piotreee.game.packets.*;
 import com.piotreee.pixengine.networking.PacketListener;
 import com.piotreee.pixengine.networking.Server;
 import com.piotreee.pixengine.objects.Transform;
@@ -42,6 +39,11 @@ public class GameServer extends Server {
 
                 ctx.writeAndFlush(new SetPlayerPacket(player.getId()).writeData());
                 sendAllExcept(new AddGameObjectPacket(player), channel);
+            }
+
+            @Override
+            public void inActive(ChannelHandlerContext ctx) {
+                removeObject(players.get(ctx.channel()));
             }
 
             @Override
@@ -83,6 +85,12 @@ public class GameServer extends Server {
             gameObject.update(delta);
             sendAll(new UpdateGameObjectPacket(gameObject));
         }
+    }
+
+    public void removeObject(ServerGameObject gameObject) {
+        gameObjects.remove(gameObject);
+        gameObjectsSize--;
+        sendAll(new RemoveGameObjectPacket(gameObject.getId()));
     }
 
     public void addGameObject(ServerGameObject gameObject) {

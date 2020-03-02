@@ -17,10 +17,10 @@ public abstract class GameScene implements Scene {
     protected Gui gui;
     protected Shader shader;
     protected Shader guiShader;
-    private List<Updatable> updatables = new ArrayList<>();
-    private int updatablesSize = 0;
-    private List<Renderable> renderables = new ArrayList<>();
-    private int renderablesSize = 0;
+    protected List<Updatable> updatables = new ArrayList<>();
+    protected int updatablesSize = 0;
+    protected List<Renderable> renderables = new ArrayList<>();
+    protected int renderablesSize = 0;
 
     public GameScene(Window window) {
         this(window, Resources.getShader("shader"), Resources.getShader("gui"));
@@ -55,11 +55,21 @@ public abstract class GameScene implements Scene {
 
     public void add(Object o) {
         if (o instanceof Updatable) {
-            addGameObject((Updatable) o);
+            addUpdatable((Updatable) o);
         }
 
         if (o instanceof Renderable) {
             addRenderable((Renderable) o);
+        }
+    }
+
+    public void remove(Object o) {
+        if (o instanceof Updatable) {
+            removeUpdatable((Updatable) o);
+        }
+
+        if (o instanceof Renderable) {
+            removeRenderable((Renderable) o);
         }
     }
 
@@ -79,13 +89,23 @@ public abstract class GameScene implements Scene {
         return renderablesSize;
     }
 
-    private void addGameObject(Updatable updatable) {
+    private void addUpdatable(Updatable updatable) {
         updatables.add(updatable);
         updatablesSize++;
     }
 
-    public void addRenderable(Renderable renderable) {
+    private void addRenderable(Renderable renderable) {
         renderables.add(renderable);
         renderablesSize++;
+    }
+
+    private void removeUpdatable(Updatable updatable) {
+        updatables.remove(updatable);
+        updatablesSize--;
+    }
+
+    private void removeRenderable(Renderable renderable) {
+        renderables.remove(renderable);
+        renderablesSize--;
     }
 }

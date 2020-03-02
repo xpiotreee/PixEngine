@@ -23,5 +23,6 @@ public class Main {
         PacketRegistry.registerPacket(2, AddGameObjectPacket.class);
         PacketRegistry.registerPacket(3, InputPacket.class);
         PacketRegistry.registerPacket(4, SetPlayerPacket.class);
+        PacketRegistry.registerPacket(5, RemoveGameObjectPacket.class);
     }
 }

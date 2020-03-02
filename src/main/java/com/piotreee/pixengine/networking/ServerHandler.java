@@ -29,6 +29,16 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        channels.remove(ctx);
+        for (int i = 0; i < packetListenersSize; i++) {
+            packetListeners.get(i).inActive(ctx);
+        }
+
+        ctx.flush();
+    }
+
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (msg instanceof byte[]) {
             byte[] bytes = (byte[]) msg;

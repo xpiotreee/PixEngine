@@ -1,10 +1,7 @@
 package com.piotreee.game.client;
 
 import com.piotreee.game.objects.client.ClientGameObject;
-import com.piotreee.game.packets.AddGameObjectPacket;
-import com.piotreee.game.packets.SetPlayerPacket;
-import com.piotreee.game.packets.TestPacket;
-import com.piotreee.game.packets.UpdateGameObjectPacket;
+import com.piotreee.game.packets.*;
 import com.piotreee.game.scenes.Game;
 import com.piotreee.pixengine.networking.Client;
 import com.piotreee.pixengine.networking.PacketListener;
@@ -42,6 +39,11 @@ public class GameClient extends Client {
             @Override
             public void on(ChannelHandlerContext ctx, SetPlayerPacket packet) {
                 game.setPlayer(getGameObject(packet.getGameObjectId()));
+            }
+        }, new PacketListener<RemoveGameObjectPacket>(RemoveGameObjectPacket.class) {
+            @Override
+            public void on(ChannelHandlerContext ctx, RemoveGameObjectPacket packet) {
+                game.remove(getGameObject(packet.getGameObjectId()));
             }
         });
     }

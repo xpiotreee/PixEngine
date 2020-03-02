@@ -6,6 +6,7 @@ import com.piotreee.pixengine.render.Camera;
 import com.piotreee.pixengine.render.Renderable;
 import com.piotreee.pixengine.render.Shader;
 import com.piotreee.pixengine.render.Sprite;
+import com.piotreee.pixengine.util.Resources;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
@@ -20,5 +21,6 @@ public class ClientGameObject extends ServerGameObject implements Renderable {
     @Override
     public void render(Shader shader, Camera camera, Matrix4f view) {
         sprite.render(shader, camera, view);
+//        Resources.getFont("font").drawText("id: " + id, 0, 0, shader, camera, view);
     }
 }

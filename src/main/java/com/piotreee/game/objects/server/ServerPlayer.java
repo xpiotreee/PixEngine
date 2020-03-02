@@ -30,8 +30,6 @@ public class ServerPlayer extends ServerGameObject {
         }
 
         super.update(delta);
-        System.out.println(input.toString());
-        System.out.println(velocity.toString());
     }
 
     public ServerPlayer setInput(InputPacket input) {
