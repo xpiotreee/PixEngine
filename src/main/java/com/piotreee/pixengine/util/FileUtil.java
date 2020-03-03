@@ -24,21 +24,7 @@ public class FileUtil {
     private static Gson gson = new Gson();
 
     public static String getShader(String filename) {
-        StringBuilder outputString = new StringBuilder();
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(FileUtil.class.getResourceAsStream("/assets/shaders/" + filename)));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                outputString.append(line);
-                outputString.append("\n");
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return outputString.toString();
+        return getTextFile("/assets/shaders/" + filename);
     }
 
     public static Texture getTexture(String filename) {
@@ -94,40 +80,12 @@ public class FileUtil {
     }
 
     public static Animation getAnimation(String name) {
-        StringBuilder outputString = new StringBuilder();
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(FileUtil.class.getResourceAsStream("/assets/animations/" + name + ".json")));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                outputString.append(line);
-                outputString.append("\n");
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        AnimationConfig config = gson.fromJson(outputString.toString(), AnimationConfig.class);
+        AnimationConfig config = gson.fromJson(getTextFile("/assets/animations/" + name + ".json"), AnimationConfig.class);
         return new Animation(getAnimationFrames(name, config.getAmount(), config.getWidth(), config.getHeight()), config.getFps());
     }
 
     public static Sheet<Texture> getTextureSheet(String name) {
-        StringBuilder outputString = new StringBuilder();
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(FileUtil.class.getResourceAsStream("/assets/textureSheets/" + name + ".json")));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                outputString.append(line);
-                outputString.append("\n");
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        TextureSheetConfig config = gson.fromJson(outputString.toString(), TextureSheetConfig.class);
+        TextureSheetConfig config = gson.fromJson(getTextFile("/assets/textureSheets/" + name + ".json"), TextureSheetConfig.class);
         Sheet<Texture> sheet = new Sheet<>(config.getWidth(), config.getHeight());
         try {
             BufferedImage image = ImageIO.read(FileUtil.class.getResourceAsStream("/assets/textureSheets/" + name + ".png"));
@@ -146,21 +104,7 @@ public class FileUtil {
     }
 
     public static Font getFont(String name) {
-        StringBuilder outputString = new StringBuilder();
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(FileUtil.class.getResourceAsStream("/assets/fonts/" + name + ".json")));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                outputString.append(line);
-                outputString.append("\n");
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        FontConfig config = gson.fromJson(outputString.toString(), FontConfig.class);
+        FontConfig config = gson.fromJson(getTextFile("/assets/fonts/" + name + ".json"), FontConfig.class);
         return new Font(config.getCharacters(), getLetters(name, config.getCharacters().length()));
     }
 
@@ -207,5 +151,23 @@ public class FileUtil {
         }
 
         return letters;
+    }
+
+    private static String getTextFile(String path) {
+        StringBuilder outputString = new StringBuilder();
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(FileUtil.class.getResourceAsStream(path)));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                outputString.append(line);
+                outputString.append("\n");
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return outputString.toString();
     }
 }
