@@ -17,7 +17,7 @@ public class PacketListener<T> {
 
     }
 
-    public void on(ChannelHandlerContext ctx, T t) {
+    public void on(ChannelHandlerContext ctx, T t) throws Exception {
 
     }
 

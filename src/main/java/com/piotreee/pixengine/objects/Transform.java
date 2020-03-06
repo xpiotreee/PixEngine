@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Transform implements Serializable {
     public Vector2f position;
     public Vector2f scale;
-    public float rotation;
+    private float rotation;
 
     public Transform(Vector2f position, Vector2f scale, float rotation) {
         this.position = position;
@@ -34,6 +34,10 @@ public class Transform implements Serializable {
 
     public void setRotation(float rotation) {
         this.rotation = rotation;
+    }
+
+    public float getRotation() {
+        return rotation;
     }
 
     public Matrix4f getProjection(Matrix4f target) {

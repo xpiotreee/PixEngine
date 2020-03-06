@@ -108,4 +108,36 @@ public abstract class GameScene implements Scene {
         renderables.remove(renderable);
         renderablesSize--;
     }
+
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
+    }
+
+    public Gui getGui() {
+        return gui;
+    }
+
+    public void setGui(Gui gui) {
+        this.gui = gui;
+    }
+
+    public Shader getShader() {
+        return shader;
+    }
+
+    public void setShader(Shader shader) {
+        this.shader = shader;
+    }
+
+    public Shader getGuiShader() {
+        return guiShader;
+    }
+
+    public void setGuiShader(Shader guiShader) {
+        this.guiShader = guiShader;
+    }
 }

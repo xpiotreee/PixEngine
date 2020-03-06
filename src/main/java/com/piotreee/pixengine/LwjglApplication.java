@@ -22,6 +22,8 @@ public class LwjglApplication {
     private Window window;
     private Scene currentScene;
     private int FPS;
+    private float scale = 96;
+    private Matrix4f view;
 
     private LwjglApplication() {
     }
@@ -60,10 +62,11 @@ public class LwjglApplication {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_TEXTURE_2D);
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        glClearColor(0.25f, 0.25f, 0.25f, 0.0f);
-        Matrix4f view = new Matrix4f().setTranslation(new Vector3f(0));
-        view.scale(64);
+//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//        glClearColor(0.25f, 0.25f, 0.25f, 0.0f);
+        glClearColor(0, 0, 0, 0);
+        view = new Matrix4f().setTranslation(new Vector3f(0));
+        view.scale(scale);
 
         double frame_cap = 1.0 / 60.0;
 
@@ -133,5 +136,15 @@ public class LwjglApplication {
 
     public int getFPS() {
         return FPS;
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
+        view = new Matrix4f().setTranslation(new Vector3f(0));
+        view.scale(scale);
     }
 }

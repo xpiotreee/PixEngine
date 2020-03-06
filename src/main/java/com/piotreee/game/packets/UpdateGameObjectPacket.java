@@ -1,6 +1,6 @@
 package com.piotreee.game.packets;
 
-import com.piotreee.game.objects.server.ServerGameObject;
+import com.piotreee.game.objects.TestGameObject;
 import com.piotreee.pixengine.networking.Packet;
 import org.joml.Vector2f;
 
@@ -14,16 +14,21 @@ public class UpdateGameObjectPacket extends Packet {
     protected float velY;
     protected float rotation;
 
-    public UpdateGameObjectPacket(ServerGameObject gameObject) {
+    public UpdateGameObjectPacket(TestGameObject gameObject) {
         this.id = 1;
         this.gameObjectId = gameObject.getId();
         Vector2f position = gameObject.getTransform().position;
         this.posX = position.x;
         this.posY = position.y;
-        Vector2f velocity = gameObject.getVelocity();
+        Vector2f velocity = new Vector2f(0, 0);
+//        if (gameObject instanceof IRigidbody) {
+//            velocity = ((IRigidbody) gameObject).getRigidbody().getVelocity();
+//        }
+        gameObject.getRigidbody().ifPresent(rb -> velocity.set(rb.getVelocity()));
+
         this.velX = velocity.x;
         this.velY = velocity.y;
-        this.rotation = gameObject.getTransform().rotation;
+        this.rotation = gameObject.getTransform().getRotation();
     }
 
     public UpdateGameObjectPacket() {

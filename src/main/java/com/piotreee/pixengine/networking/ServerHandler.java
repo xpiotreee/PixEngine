@@ -45,7 +45,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
             Packet packet = new Packet(bytes);
             for (int i = 0; i < packetListenersSize; i++) {
-                Class<? extends Packet> packetClass = PacketRegistry.getPacketClass(packet.getId());
+                Class<? extends Packet> packetClass = Network.packetRegistry.get(packet.getId());
                 PacketListener packetListener = packetListeners.get(i);
                 if (packetListener.getType().isAssignableFrom(packetClass)) {
                     packetListener.on(ctx, packetClass.getConstructor(byte[].class).newInstance(bytes));

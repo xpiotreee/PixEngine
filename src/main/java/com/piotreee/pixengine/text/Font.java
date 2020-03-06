@@ -15,7 +15,9 @@ public class Font {
     }
 
     public void drawText(String text, float x, float y, Shader shader, Camera camera, Matrix4f view) {
-        float scale = view.getScale(new Vector3f()).x;
+        Vector3f scale = view.getScale(new Vector3f());
+        float scaleX = scale.x;
+        float scaleY = scale.y;
         shader.bind();
         shader.setUniform("sampler", 0);
 
@@ -23,7 +25,7 @@ public class Font {
         char[] chars = text.toCharArray();
         for (int i = 0; i < chars.length; i++) {
             if (chars[i] == ' ') {
-                x += 20 / scale;
+                x += 20 / scaleX;
                 continue;
             } else if (chars[i] == '\n') {
                 x = startX;
@@ -33,14 +35,15 @@ public class Font {
 
             Letter letter = getLetter(chars[i]);
             Matrix4f projection = camera.getProjection();
-            float width = letter.getTexture().getWidth() / scale;
+            float width = letter.getTexture().getWidth() / scaleX;
+            float height = letter.getTexture().getHeight() / scaleY;
             projection.mul(view);
             projection.translate(x, y, 0);
-            projection.scale(width * 2, 1, 1);
+            projection.scale(width * 2, height * 1.5f, 1);
             letter.draw(shader, view, projection);
             x += width;
             if (i + 1 < chars.length && chars[i + 1] != ' ' && chars[i + 1] != '\n') {
-                x += getLetter(chars[i + 1]).getTexture().getWidth() / scale;
+                x += getLetter(chars[i + 1]).getTexture().getWidth() / scaleX;
             }
         }
     }

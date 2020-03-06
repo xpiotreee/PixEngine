@@ -49,7 +49,7 @@ public class Client implements Runnable {
         } finally {
             try {
                 channel.closeFuture().sync();
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             workerGroup.shutdownGracefully();

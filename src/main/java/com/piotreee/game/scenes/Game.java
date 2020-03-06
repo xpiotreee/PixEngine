@@ -1,20 +1,20 @@
 package com.piotreee.game.scenes;
 
 import com.piotreee.game.client.GameClient;
-import com.piotreee.game.objects.client.ClientGameObject;
-import com.piotreee.game.objects.server.ServerGameObject;
-import com.piotreee.game.packets.InputPacket;
-import com.piotreee.game.packets.RemoveGameObjectPacket;
+import com.piotreee.game.objects.Player;
+import com.piotreee.game.objects.TestGameObject;
 import com.piotreee.game.server.GameServer;
-import com.piotreee.pixengine.LwjglApplication;
 import com.piotreee.pixengine.gui.Alignment;
 import com.piotreee.pixengine.gui.Text;
 import com.piotreee.pixengine.io.Input;
 import com.piotreee.pixengine.io.Window;
 import com.piotreee.pixengine.objects.GameScene;
+import com.piotreee.pixengine.objects.Tile;
 import com.piotreee.pixengine.objects.Updatable;
+import org.joml.Matrix4f;
 
-import static org.lwjgl.glfw.GLFW.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game extends GameScene {
     public static boolean isSingleplayer = true;
@@ -24,11 +24,10 @@ public class Game extends GameScene {
     private GameServer server;
     private GameClient client;
 
-    private Text date;
     private Text connectedCount;
 
-    private ClientGameObject player;
-    private float speed = 0.015f;
+    private List<Tile> tiles = new ArrayList<>();
+    private int tilesSize = 0;
 
     public Game(Window window) {
         super(window);
@@ -37,36 +36,17 @@ public class Game extends GameScene {
     @Override
     public void update(double delta, Input input) {
         super.update(delta, input);
-        if (input.isKeyPressed(GLFW_KEY_TAB)) {
-            LwjglApplication.INSTANCE.loadScene(MainMenu.class);
+        client.update(delta, input);
+    }
+
+    @Override
+    public void render(Matrix4f view) {
+        shader.bind();
+        for (int i = 0; i < tilesSize; i++) {
+            tiles.get(i).render(shader, camera, view);
         }
 
-        if (player == null) {
-            return;
-        }
-
-        float fixedSpeed = speed * (float) delta;
-        byte moveHorizontally = 0;
-        byte moveVertically = 0;
-
-        if (input.isKeyDown(GLFW_KEY_A) && !input.isKeyDown(GLFW_KEY_D)) {
-            moveHorizontally = -1;
-            player.getVelocity().add(-fixedSpeed, 0);
-        } else if (input.isKeyDown(GLFW_KEY_D) && !input.isKeyDown(GLFW_KEY_A)) {
-            moveHorizontally = 1;
-            player.getVelocity().add(fixedSpeed, 0);
-        }
-
-        if (input.isKeyDown(GLFW_KEY_S) && !input.isKeyDown(GLFW_KEY_W)) {
-            moveVertically = -1;
-            player.getVelocity().add(0, -fixedSpeed);
-        } else if (input.isKeyDown(GLFW_KEY_W) && !input.isKeyDown(GLFW_KEY_S)) {
-            moveVertically = 1;
-            player.getVelocity().add(0, fixedSpeed);
-        }
-
-
-        client.send(new InputPacket(moveHorizontally, moveVertically));
+        super.render(view);
     }
 
     @Override
@@ -79,9 +59,8 @@ public class Game extends GameScene {
 
         new Thread(client = new GameClient(host, port, this)).start();
 
-        gui.add(date = new Text("", Alignment.TOP_LEFT, 16, -16, 128, 32));
-        gui.add(connectedCount = new Text("", Alignment.LEFT, 16, 0, 128, 32));
-        gui.add(new Text(host + ":" + port, Alignment.BOTTOM_LEFT, 16, 16, 128, 32));
+        gui.add(connectedCount = new Text("Connected: ", Alignment.LEFT, 16, 0, 128, 32));
+        gui.add(new Text("Connected to: " + host + ":" + port, Alignment.BOTTOM_LEFT, 16, 16, 128, 32));
     }
 
     @Override
@@ -92,15 +71,39 @@ public class Game extends GameScene {
         }
     }
 
-    public Text getDate() {
-        return date;
+    public void remove(int id) {
+        super.remove(getGameObject(id));
+    }
+
+    public void addTile(Tile tile) {
+        tiles.add(tile);
+        tilesSize++;
+    }
+
+    public void removeTile(Tile tile) {
+        tiles.remove(tile);
+        tilesSize--;
     }
 
     public Text getConnectedCount() {
         return connectedCount;
     }
 
-    public void setPlayer(ClientGameObject player) {
-        this.player = player;
+    private TestGameObject getGameObject(int id) {
+        for (int i = 0; i < updatablesSize; i++) {
+            Updatable updatable = updatables.get(i);
+            if (updatable instanceof TestGameObject) {
+                TestGameObject gameObject = (TestGameObject) updatable;
+                if (gameObject.getId() == id) {
+                    return gameObject;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public void setPlayer(int id) {
+        client.setPlayer((Player) getGameObject(id));
     }
 }

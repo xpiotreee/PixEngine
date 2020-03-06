@@ -1,94 +1,65 @@
 package com.piotreee.game.client;
 
-import com.piotreee.game.objects.client.ClientGameObject;
-import com.piotreee.game.packets.*;
+import com.piotreee.game.client.listeners.*;
+import com.piotreee.game.objects.Player;
+import com.piotreee.game.packets.InputPacket;
 import com.piotreee.game.scenes.Game;
+import com.piotreee.game.scenes.MainMenu;
+import com.piotreee.pixengine.LwjglApplication;
+import com.piotreee.pixengine.io.Input;
 import com.piotreee.pixengine.networking.Client;
-import com.piotreee.pixengine.networking.PacketListener;
-import com.piotreee.pixengine.objects.Transform;
-import com.piotreee.pixengine.objects.Updatable;
-import com.piotreee.pixengine.render.Sprite;
-import com.piotreee.pixengine.util.Resources;
-import io.netty.channel.ChannelHandlerContext;
-import org.joml.Vector2f;
 
-import java.util.List;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class GameClient extends Client {
+    private Player player;
     private Game game;
 
     public GameClient(String host, int port, Game game) {
         super(host, port);
         this.game = game;
-        addListeners(new PacketListener<TestPacket>(TestPacket.class) {
-            @Override
-            public void on(ChannelHandlerContext ctx, TestPacket testPacket) {
-                game.getConnectedCount().setText(testPacket.getTest() + "");
-            }
-        }, new PacketListener<UpdateGameObjectPacket>(UpdateGameObjectPacket.class) {
-            @Override
-            public void on(ChannelHandlerContext ctx, UpdateGameObjectPacket packet) {
-                update(packet);
-            }
-        }, new PacketListener<AddGameObjectPacket>(AddGameObjectPacket.class) {
-            @Override
-            public void on(ChannelHandlerContext ctx, AddGameObjectPacket packet) {
-                addGameObject(packet);
-            }
-        }, new PacketListener<SetPlayerPacket>(SetPlayerPacket.class) {
-            @Override
-            public void on(ChannelHandlerContext ctx, SetPlayerPacket packet) {
-                game.setPlayer(getGameObject(packet.getGameObjectId()));
-            }
-        }, new PacketListener<RemoveGameObjectPacket>(RemoveGameObjectPacket.class) {
-            @Override
-            public void on(ChannelHandlerContext ctx, RemoveGameObjectPacket packet) {
-                game.remove(getGameObject(packet.getGameObjectId()));
-            }
-        });
+        addListeners(
+                new ConnectedCountListener(game),
+                new UpdateGameObjectListener(game),
+                new AddGameObjectListener(game),
+                new SetPlayerListener(game),
+                new RemoveGameObjectListener(game),
+                new AddTileListener(game)
+        );
     }
 
-    private ClientGameObject getGameObject(int id) {
-        List<Updatable> updatables = game.getUpdatables();
-        int size = game.getUpdatablesSize();
-        for (int i = 0; i < size; i++) {
-            Updatable updatable = updatables.get(i);
-            if (updatable instanceof ClientGameObject) {
-                ClientGameObject gameObject = (ClientGameObject) updatable;
-                if (gameObject.getId() == id) {
-                    return gameObject;
-                }
-            }
+    public void update(double delta, Input input) {
+        if (input.isKeyPressed(GLFW_KEY_TAB)) {
+            LwjglApplication.INSTANCE.loadScene(MainMenu.class);
         }
 
-        return null;
-    }
-
-    private void addGameObject(AddGameObjectPacket packet) {
-        Transform transform = new Transform(
-                new Vector2f(packet.getPosX(), packet.getPosY()),
-                new Vector2f(packet.getScaleX(), packet.getScaleY()),
-                packet.getRotation());
-
-        game.add(
-                new ClientGameObject(packet.getGameObjectId(), transform,
-                        new Vector2f(packet.getVelX(), packet.getVelY()),
-                        new Sprite(transform, Resources.getTexture(packet.getSpriteName()))));
-    }
-
-    private void update(UpdateGameObjectPacket packet) {
-        List<Updatable> updatables = game.getUpdatables();
-        int size = game.getUpdatablesSize();
-        for (int i = 0; i < size; i++) {
-            Updatable updatable = updatables.get(i);
-            if (updatable instanceof ClientGameObject) {
-                ClientGameObject gameObject = (ClientGameObject) updatable;
-                if (gameObject.getId() == packet.getGameObjectId()) {
-                    gameObject.getTransform().position.set(packet.getPosX(), packet.getPosY());
-                    gameObject.getTransform().setRotation(packet.getRotation());
-                    gameObject.setVelocity(packet.getVelX(), packet.getVelY());
-                }
-            }
+        if (player == null) {
+            return;
         }
+
+        player.getTransform().position.mul(-LwjglApplication.INSTANCE.getScale(), game.getCamera().getPosition());
+
+        byte moveHorizontally = 0;
+        byte moveVertically = 0;
+
+        if (input.isKeyDown(GLFW_KEY_A) && !input.isKeyDown(GLFW_KEY_D)) {
+            moveHorizontally = -1;
+        } else if (input.isKeyDown(GLFW_KEY_D) && !input.isKeyDown(GLFW_KEY_A)) {
+            moveHorizontally = 1;
+        }
+
+        if (input.isKeyDown(GLFW_KEY_S) && !input.isKeyDown(GLFW_KEY_W)) {
+            moveVertically = -1;
+        } else if (input.isKeyDown(GLFW_KEY_W) && !input.isKeyDown(GLFW_KEY_S)) {
+            moveVertically = 1;
+        }
+
+        InputPacket inputPacket = new InputPacket(moveHorizontally, moveVertically);
+        player.setInput(inputPacket);
+        send(inputPacket);
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

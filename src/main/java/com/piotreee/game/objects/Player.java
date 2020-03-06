@@ -1,0 +1,75 @@
+package com.piotreee.game.objects;
+
+import com.piotreee.game.packets.AddGameObjectPacket;
+import com.piotreee.game.packets.InputPacket;
+import com.piotreee.pixengine.objects.Rigidbody;
+import com.piotreee.pixengine.render.Camera;
+import com.piotreee.pixengine.render.Renderable;
+import com.piotreee.pixengine.render.Shader;
+import com.piotreee.pixengine.render.Sprite;
+import com.piotreee.pixengine.text.Font;
+import com.piotreee.pixengine.util.Resources;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+
+import java.util.Optional;
+
+public class Player extends TestGameObject implements Renderable {
+    private static final Font FONT = Resources.getFont("font");
+    private static final float SPEED = 0.015f;
+    private InputPacket input;
+    private Rigidbody rigidbody;
+    private Renderable renderable;
+
+    public Player(AddGameObjectPacket p) {
+        super(p);
+    }
+
+    public Player(int id) {
+        super(id, 2);
+        this.rigidbody = new Rigidbody();
+        this.input = new InputPacket((byte) 0, (byte) 0);
+    }
+
+    @Override
+    public void update(double delta) {
+        float fixedSpeed = SPEED * (float) delta;
+        if (input.getMoveHorizontally() > 0) {
+            rigidbody.addVelocity(fixedSpeed, 0);
+        } else if (input.getMoveHorizontally() < 0) {
+            rigidbody.addVelocity(-fixedSpeed, 0);
+        }
+
+        if (input.getMoveVertically() > 0) {
+            rigidbody.addVelocity(0, fixedSpeed);
+        } else if (input.getMoveVertically() < 0) {
+            rigidbody.addVelocity(0, -fixedSpeed);
+        }
+
+        rigidbody.move(transform.position, 0.01f, delta);
+    }
+
+    @Override
+    public void render(Shader shader, Camera camera, Matrix4f view) {
+        renderable.render(shader, camera, view);
+        Vector3f scale = view.getScale(new Vector3f());
+        FONT.drawText("id: " + id, transform.position.x - 32 / scale.x, transform.position.y - 32 / scale.y, shader, camera, view);
+    }
+
+    @Override
+    protected void createFromPacket(AddGameObjectPacket p) {
+        this.rigidbody = new Rigidbody();
+        this.input = new InputPacket((byte) 0, (byte) 0);
+        super.createFromPacket(p);
+        this.renderable = new Sprite(transform, Resources.getTexture("test"));
+    }
+
+    public void setInput(InputPacket input) {
+        this.input = input;
+    }
+
+    @Override
+    public Optional<Rigidbody> getRigidbody() {
+        return Optional.of(rigidbody);
+    }
+}

@@ -5,7 +5,6 @@ import com.piotreee.pixengine.objects.Transform;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.glViewport;
 
 public class Camera {
@@ -25,17 +24,17 @@ public class Camera {
             glViewport(0, 0, window.getWidth(), window.getHeight());
         }
 
-        if (window.getInput().isKeyDown(GLFW_KEY_LEFT)) {
-            addPosition(10f, 0);
-        } else if (window.getInput().isKeyDown(GLFW_KEY_RIGHT)) {
-            addPosition(-10f, 0);
-        }
-
-        if (window.getInput().isKeyDown(GLFW_KEY_UP)) {
-            addPosition(0, -10f);
-        } else if (window.getInput().isKeyDown(GLFW_KEY_DOWN)) {
-            addPosition(0, 10f);
-        }
+//        if (window.getInput().isKeyDown(GLFW_KEY_LEFT)) {
+//            addPosition(10f, 0);
+//        } else if (window.getInput().isKeyDown(GLFW_KEY_RIGHT)) {
+//            addPosition(-10f, 0);
+//        }
+//
+//        if (window.getInput().isKeyDown(GLFW_KEY_UP)) {
+//            addPosition(0, -10f);
+//        } else if (window.getInput().isKeyDown(GLFW_KEY_DOWN)) {
+//            addPosition(0, 10f);
+//        }
 
 //        if (window.getInput().isKeyDown(GLFW_KEY_A)) {
 //            rotate(-0.01f);
@@ -67,6 +66,7 @@ public class Camera {
     }
 
     public void setPosition(Vector2f position) {
+        System.out.println(position);
         transform.position.set(position);
     }
 
@@ -77,12 +77,12 @@ public class Camera {
     public Matrix4f getProjection() {
         return projection
                 .translate(transform.position.x, transform.position.y, 0, new Matrix4f())
-                .rotateZ(transform.rotation)
+                .rotateZ(transform.getRotation())
                 .scale(transform.scale.x, transform.scale.y, 1);
     }
 
     public float getRotation() {
-        return transform.rotation;
+        return transform.getRotation();
     }
 
     public void setRotation(float rotation) {
