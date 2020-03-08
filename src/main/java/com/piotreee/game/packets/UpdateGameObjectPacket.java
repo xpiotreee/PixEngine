@@ -8,26 +8,17 @@ import java.nio.ByteBuffer;
 
 public class UpdateGameObjectPacket extends Packet {
     protected int gameObjectId;
-    protected float posX;
-    protected float posY;
-    protected float velX;
-    protected float velY;
+    protected Vector2f position;
+    protected Vector2f velocity;
     protected float rotation;
 
     public UpdateGameObjectPacket(TestGameObject gameObject) {
         this.id = 1;
         this.gameObjectId = gameObject.getId();
-        Vector2f position = gameObject.getTransform().position;
-        this.posX = position.x;
-        this.posY = position.y;
-        Vector2f velocity = new Vector2f(0, 0);
-//        if (gameObject instanceof IRigidbody) {
-//            velocity = ((IRigidbody) gameObject).getRigidbody().getVelocity();
-//        }
+        position = gameObject.getTransform().position;
+        Vector2f velocity = new Vector2f();
         gameObject.getRigidbody().ifPresent(rb -> velocity.set(rb.getVelocity()));
-
-        this.velX = velocity.x;
-        this.velY = velocity.y;
+        this.velocity = velocity;
         this.rotation = gameObject.getTransform().getRotation();
     }
 
@@ -43,10 +34,8 @@ public class UpdateGameObjectPacket extends Packet {
     public void readData(ByteBuffer buffer) {
         super.readData(buffer);
         this.gameObjectId = buffer.getInt();
-        this.posX = buffer.getFloat();
-        this.posY = buffer.getFloat();
-        this.velX = buffer.getFloat();
-        this.velY = buffer.getFloat();
+        this.position = readVector2f(buffer);
+        this.velocity = readVector2f(buffer);
         this.rotation = buffer.getFloat();
     }
 
@@ -54,10 +43,8 @@ public class UpdateGameObjectPacket extends Packet {
     public ByteBuffer writeData(ByteBuffer buffer) {
         super.writeData(buffer);
         buffer.putInt(gameObjectId);
-        buffer.putFloat(posX);
-        buffer.putFloat(posY);
-        buffer.putFloat(velX);
-        buffer.putFloat(velY);
+        writeVector2f(buffer, position);
+        writeVector2f(buffer, velocity);
         buffer.putFloat(rotation);
         return buffer;
     }
@@ -71,39 +58,21 @@ public class UpdateGameObjectPacket extends Packet {
         return this;
     }
 
-    public float getPosX() {
-        return posX;
+    public Vector2f getPosition() {
+        return position;
     }
 
-    public UpdateGameObjectPacket setPosX(float posX) {
-        this.posX = posX;
+    public UpdateGameObjectPacket setPosition(Vector2f position) {
+        this.position = position;
         return this;
     }
 
-    public float getPosY() {
-        return posY;
+    public Vector2f getVelocity() {
+        return velocity;
     }
 
-    public UpdateGameObjectPacket setPosY(float posY) {
-        this.posY = posY;
-        return this;
-    }
-
-    public float getVelX() {
-        return velX;
-    }
-
-    public UpdateGameObjectPacket setVelX(float velX) {
-        this.velX = velX;
-        return this;
-    }
-
-    public float getVelY() {
-        return velY;
-    }
-
-    public UpdateGameObjectPacket setVelY(float velY) {
-        this.velY = velY;
+    public UpdateGameObjectPacket setVelocity(Vector2f velocity) {
+        this.velocity = velocity;
         return this;
     }
 
@@ -120,10 +89,8 @@ public class UpdateGameObjectPacket extends Packet {
     public String toString() {
         return "UpdateGameObjectPacket{" +
                 "gameObjectId=" + gameObjectId +
-                ", posX=" + posX +
-                ", posY=" + posY +
-                ", velX=" + velX +
-                ", velY=" + velY +
+                ", position=" + position +
+                ", velocity=" + velocity +
                 ", rotation=" + rotation +
                 ", id=" + id +
                 '}';

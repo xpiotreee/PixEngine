@@ -1,17 +1,25 @@
 package com.piotreee.pixengine.objects;
 
+import com.piotreee.game.packets.SetTilePacket;
 import com.piotreee.pixengine.render.*;
 import org.joml.Matrix4f;
 import org.joml.Vector2i;
 
 public abstract class Tile implements Renderable {
-    private int type;
-    private Vector2i position;
+    protected int type;
+    protected Vector2i position;
+
+    public Tile(SetTilePacket packet) {
+        this(packet.getType(), new Vector2i(packet.getX(), packet.getY()));
+        init();
+    }
 
     public Tile(int type, Vector2i position) {
         this.type = type;
         this.position = position;
     }
+
+    protected abstract Tile init();
 
     @Override
     public void render(Shader shader, Camera camera, Matrix4f view) {
@@ -42,6 +50,10 @@ public abstract class Tile implements Renderable {
 
     public int getY() {
         return position.y;
+    }
+
+    public Vector2i getPosition() {
+        return position;
     }
 
     @Override

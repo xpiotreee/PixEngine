@@ -32,7 +32,8 @@ public class Gui implements Updatable {
         }
     }
 
-    public void update(double delta) {
+    @Override
+    public void update(float delta) {
         if (window.hasResized()) {
             camera.setProjection(window.getWidth(), window.getHeight());
             guiAlignment.fixAlignments();

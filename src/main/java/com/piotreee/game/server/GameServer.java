@@ -6,6 +6,7 @@ import com.piotreee.game.objects.TestGameObject;
 import com.piotreee.game.packets.RemoveGameObjectPacket;
 import com.piotreee.game.packets.UpdateGameObjectPacket;
 import com.piotreee.game.server.listeners.InputListener;
+import com.piotreee.game.server.listeners.TileActionListener;
 import com.piotreee.pixengine.networking.Server;
 import com.piotreee.pixengine.objects.TileMap;
 import io.netty.channel.Channel;
@@ -27,25 +28,33 @@ public class GameServer extends Server {
         super(port);
         addGameObject(new Papierz(IDs++, 0, 0, 3, 3, 0));
         addGameObject(new Papierz(IDs++, 3, -1, 2, 1, 45));
-        addListeners(new InputListener(this));
+        addListeners(new InputListener(this), new TileActionListener(this));
 
     }
 
     public void run() {
         runnable = () -> {
-            double ns = 1000000000.0 / 20.0;
-            double delta = 0;
+            double frame_cap = 1.0 / 60.0;
 
-            long lastTime = System.nanoTime();
+            double frame_time = 0;
+
+            double time = System.nanoTime() / (double) 1000000000L;
+            double unprocessed = 0;
 
             while (running) {
-                long now = System.nanoTime();
-                delta += (now - lastTime) / ns;
-                lastTime = now;
+                double time_2 = System.nanoTime() / (double) 1000000000L;
+                double passed = time_2 - time;
+                unprocessed += passed;
+                frame_time += passed;
 
-                while (delta >= 1) {
-                    update(delta);
-                    delta--;
+                time = time_2;
+
+                while (unprocessed >= frame_cap) {
+                    unprocessed -= frame_cap;
+                    update((float) frame_cap);
+                    if (frame_time >= 1.0) {
+                        frame_time = 0;
+                    }
                 }
             }
         };
@@ -53,9 +62,9 @@ public class GameServer extends Server {
         super.run();
     }
 
-    private void update(double delta) {
-        gameObjects.get(0).getTransform().rotate(0.01f * (float) delta);
-        gameObjects.get(1).getTransform().rotate(-0.01f * (float) delta);
+    private void update(float delta) {
+        gameObjects.get(0).getTransform().rotate(20f * delta);
+        gameObjects.get(1).getTransform().rotate(-10f * delta);
 
         for (int i = 0; i < gameObjectsSize; i++) {
             TestGameObject gameObject = gameObjects.get(i);

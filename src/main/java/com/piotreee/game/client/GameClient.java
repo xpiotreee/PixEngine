@@ -24,11 +24,12 @@ public class GameClient extends Client {
                 new AddGameObjectListener(game),
                 new SetPlayerListener(game),
                 new RemoveGameObjectListener(game),
-                new AddTileListener(game)
+                new SetTileListener(game)
         );
     }
 
-    public void update(double delta, Input input) {
+
+    public void update(float delta, Input input) {
         if (input.isKeyPressed(GLFW_KEY_TAB)) {
             LwjglApplication.INSTANCE.loadScene(MainMenu.class);
         }

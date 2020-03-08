@@ -57,7 +57,7 @@ public class TextField extends Panel implements Updatable {
     }
 
     @Override
-    public void update(double delta) {
+    public void update(float delta) {
         Input input = LwjglApplication.INSTANCE.getInput();
         if (collider.contains(input.getMousePos()) && currentState != STATE_CLICKED) {
             if (input.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {

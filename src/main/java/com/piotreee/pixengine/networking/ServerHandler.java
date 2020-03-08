@@ -20,17 +20,17 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        channels.add(ctx.channel());
         for (int i = 0; i < packetListenersSize; i++) {
             packetListeners.get(i).active(ctx);
         }
 
-        channels.add(ctx.channel());
         ctx.flush();
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        channels.remove(ctx);
+        channels.remove(ctx.channel());
         for (int i = 0; i < packetListenersSize; i++) {
             packetListeners.get(i).inActive(ctx);
         }

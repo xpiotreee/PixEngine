@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public class Player extends TestGameObject implements Renderable {
     private static final Font FONT = Resources.getFont("font");
-    private static final float SPEED = 0.015f;
+    private static final float SPEED = 3f;//0.015f;
     private InputPacket input;
     private Rigidbody rigidbody;
     private Renderable renderable;
@@ -32,8 +32,8 @@ public class Player extends TestGameObject implements Renderable {
     }
 
     @Override
-    public void update(double delta) {
-        float fixedSpeed = SPEED * (float) delta;
+    public void update(float delta) {
+        float fixedSpeed = SPEED * delta;
         if (input.getMoveHorizontally() > 0) {
             rigidbody.addVelocity(fixedSpeed, 0);
         } else if (input.getMoveHorizontally() < 0) {
@@ -46,7 +46,9 @@ public class Player extends TestGameObject implements Renderable {
             rigidbody.addVelocity(0, -fixedSpeed);
         }
 
-        rigidbody.move(transform.position, 0.01f, delta);
+//        System.out.println("player pos: x: " + transform.position.x + " y: " + transform.position.y);
+
+        rigidbody.move(transform.position, 2f, delta);
     }
 
     @Override

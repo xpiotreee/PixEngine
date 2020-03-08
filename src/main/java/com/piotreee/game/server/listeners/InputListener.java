@@ -9,7 +9,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 
 public class InputListener extends PacketListener<InputPacket> {
-    GameServer server;
+    private GameServer server;
 
     public InputListener(GameServer server) {
         super(InputPacket.class);
@@ -20,20 +20,20 @@ public class InputListener extends PacketListener<InputPacket> {
     public void active(ChannelHandlerContext ctx) {
         Player player = new Player(GameServer.IDs++);
         Channel channel = ctx.channel();
-        server.addGameObject(player);
         server.getPlayers().put(channel, player);
         for (int i = 0; i < server.getGameObjectsSize(); i++) {
             ctx.writeAndFlush(new AddGameObjectPacket(server.getGameObjects().get(i)).writeData());
         }
 
+        server.addGameObject(player);
+        server.sendAll(new AddGameObjectPacket(player));
+
         Tile[] tiles = server.getTileMap().getTiles();
         for (int i = 0; i < tiles.length; i++) {
-            ctx.writeAndFlush(new AddTilePacket(tiles[i]).writeData());
+            ctx.writeAndFlush(new SetTilePacket(tiles[i]).writeData());
         }
 
         ctx.writeAndFlush(new SetPlayerPacket(player.getId()).writeData());
-
-        server.sendAllExcept(new AddGameObjectPacket(player), channel);
         server.sendAll(new ConnectedCountPacket(server.getHandler().getChannelsSize()));
     }
 

@@ -1,5 +1,6 @@
 package com.piotreee.pixengine.io;
 
+import com.piotreee.pixengine.LwjglApplication;
 import org.joml.Vector2f;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -11,6 +12,7 @@ public class Input {
     private boolean[] mouseButtons;
 
     private Vector2f mousePos = new Vector2f();
+    private Vector2f mouseWorldPos = new Vector2f();
     private double[] x = new double[1];
     private double[] y = new double[1];
     private int[] winWidth = new int[1];
@@ -57,6 +59,13 @@ public class Input {
         glfwGetCursorPos(window, x, y);
         glfwGetWindowSize(window, winWidth, winHeight);
         return mousePos.set((float) x[0] - (winWidth[0] / 2.0f), -((float) y[0] - (winHeight[0] / 2.0f)));
+    }
+
+    public Vector2f getMouseWorldPos() {
+        return mouseWorldPos.set(getMousePos().negate())
+                .add(LwjglApplication.INSTANCE.getCurrentScene().getCamera().getPosition())
+                .mul(1 / LwjglApplication.INSTANCE.getScale())
+                .negate();
     }
 
     public void update() {

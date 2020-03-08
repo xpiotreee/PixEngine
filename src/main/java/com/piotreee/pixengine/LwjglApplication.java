@@ -2,7 +2,7 @@ package com.piotreee.pixengine;
 
 import com.piotreee.pixengine.io.Input;
 import com.piotreee.pixengine.io.Window;
-import com.piotreee.pixengine.objects.Scene;
+import com.piotreee.pixengine.objects.GameScene;
 import com.piotreee.pixengine.util.Resources;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -20,7 +20,7 @@ public class LwjglApplication {
     public final static LwjglApplication INSTANCE = new LwjglApplication();
 
     private Window window;
-    private Scene currentScene;
+    private GameScene currentScene;
     private int FPS;
     private float scale = 96;
     private Matrix4f view;
@@ -28,7 +28,7 @@ public class LwjglApplication {
     private LwjglApplication() {
     }
 
-    public void run(Class<? extends Scene> sceneClass) {
+    public void run(Class<? extends GameScene> sceneClass) {
         System.out.println("Running LWJGL " + Version.getVersion() + "!");
         init();
         try {
@@ -92,7 +92,7 @@ public class LwjglApplication {
                     window.setShouldClose(true);
                 }
 
-                currentScene.update(frame_cap, window.getInput());
+                currentScene.update((float) frame_cap, window.getInput());
                 window.update();
 
                 if (frame_time >= 1.0) {
@@ -115,7 +115,7 @@ public class LwjglApplication {
         glfwTerminate();
     }
 
-    public void loadScene(Class<? extends Scene> sceneClass) {
+    public void loadScene(Class<? extends GameScene> sceneClass) {
         currentScene.unload();
         try {
             currentScene = sceneClass.getConstructor(Window.class).newInstance(window);
@@ -146,5 +146,9 @@ public class LwjglApplication {
         this.scale = scale;
         view = new Matrix4f().setTranslation(new Vector3f(0));
         view.scale(scale);
+    }
+
+    public GameScene getCurrentScene() {
+        return currentScene;
     }
 }

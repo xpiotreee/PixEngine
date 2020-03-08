@@ -12,7 +12,7 @@ import org.joml.Matrix4f;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GameScene implements Scene {
+public abstract class GameScene {
     protected Camera camera;
     protected Gui gui;
     protected Shader shader;
@@ -33,8 +33,7 @@ public abstract class GameScene implements Scene {
         this.guiShader = guiShader;
     }
 
-    @Override
-    public void update(double delta, Input input) {
+    public void update(float delta, Input input) {
         camera.update();
         gui.update(delta);
         for (int i = 0; i < updatablesSize; i++) {
@@ -42,7 +41,6 @@ public abstract class GameScene implements Scene {
         }
     }
 
-    @Override
     public void render(Matrix4f view) {
         shader.bind();
         for (int i = 0; i < renderablesSize; i++) {
@@ -52,6 +50,10 @@ public abstract class GameScene implements Scene {
         guiShader.bind();
         gui.render(guiShader);
     }
+
+    public abstract void load();
+
+    public abstract void unload();
 
     public void add(Object o) {
         if (o instanceof Updatable) {

@@ -5,20 +5,20 @@ import com.piotreee.pixengine.objects.Tile;
 
 import java.nio.ByteBuffer;
 
-public class AddTilePacket extends Packet {
+public class SetTilePacket extends Packet {
     private int type;
     private int x;
     private int y;
 
-    public AddTilePacket(byte[] data) {
+    public SetTilePacket(byte[] data) {
         super(data);
     }
 
-    public AddTilePacket(Tile tile) {
+    public SetTilePacket(Tile tile) {
         this(tile.getType(), tile.getX(), tile.getY());
     }
 
-    public AddTilePacket(int type, int x, int y) {
+    public SetTilePacket(int type, int x, int y) {
         this.id = 6;
         this.type = type;
         this.x = x;
@@ -46,7 +46,7 @@ public class AddTilePacket extends Packet {
         return type;
     }
 
-    public AddTilePacket setType(int type) {
+    public SetTilePacket setType(int type) {
         this.type = type;
         return this;
     }
@@ -55,7 +55,7 @@ public class AddTilePacket extends Packet {
         return x;
     }
 
-    public AddTilePacket setX(int x) {
+    public SetTilePacket setX(int x) {
         this.x = x;
         return this;
     }
@@ -64,7 +64,7 @@ public class AddTilePacket extends Packet {
         return y;
     }
 
-    public AddTilePacket setY(int y) {
+    public SetTilePacket setY(int y) {
         this.y = y;
         return this;
     }

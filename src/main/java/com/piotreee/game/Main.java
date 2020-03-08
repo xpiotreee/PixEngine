@@ -3,6 +3,7 @@ package com.piotreee.game;
 import com.piotreee.game.objects.Papierz;
 import com.piotreee.game.objects.Player;
 import com.piotreee.game.objects.TestGameObject;
+import com.piotreee.game.objects.tiles.Dirt;
 import com.piotreee.game.objects.tiles.Grass;
 import com.piotreee.game.packets.*;
 import com.piotreee.game.scenes.MainMenu;
@@ -35,7 +36,8 @@ public class Main {
         Network.packetRegistry.register(3, InputPacket.class);
         Network.packetRegistry.register(4, SetPlayerPacket.class);
         Network.packetRegistry.register(5, RemoveGameObjectPacket.class);
-        Network.packetRegistry.register(6, AddTilePacket.class);
+        Network.packetRegistry.register(6, SetTilePacket.class);
+        Network.packetRegistry.register(7, TileActionPacket.class);
     }
 
     private static void registerGameObjects() {
@@ -46,5 +48,6 @@ public class Main {
 
     private static void registerTiles() {
         tileRegistry.register(0, Grass.class);
+        tileRegistry.register(1, Dirt.class);
     }
 }

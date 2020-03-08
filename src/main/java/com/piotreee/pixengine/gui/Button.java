@@ -46,7 +46,8 @@ public class Button extends Panel implements Updatable {
         this.callback = callback;
     }
 
-    public void update(double delta) {
+    @Override
+    public void update(float delta) {
         Input input = LwjglApplication.INSTANCE.getInput();
         if (collider.contains(input.getMousePos())) {
             selectedState = STATE_SELECTED;

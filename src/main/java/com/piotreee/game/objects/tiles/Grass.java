@@ -1,21 +1,34 @@
 package com.piotreee.game.objects.tiles;
 
-import com.piotreee.game.packets.AddTilePacket;
+import com.piotreee.game.packets.SetTilePacket;
 import com.piotreee.pixengine.objects.Tile;
+import com.piotreee.pixengine.render.Camera;
+import com.piotreee.pixengine.render.Shader;
 import com.piotreee.pixengine.render.Visual;
 import com.piotreee.pixengine.util.Resources;
+import org.joml.Matrix4f;
 import org.joml.Vector2i;
 
 public class Grass extends Tile {
     private Visual visual;
 
-    public Grass(AddTilePacket packet) {
-        super(packet.getType(), new Vector2i(packet.getX(), packet.getY()));
-        this.visual = Resources.getTexture("grass");
+    public Grass(SetTilePacket packet) {
+        super(packet);
     }
 
-    public Grass(int type, Vector2i position) {
-        super(type, position);
+    public Grass(Vector2i position) {
+        super(0, position);
+    }
+
+    @Override
+    protected Tile init() {
+        this.visual = Resources.getTexture("grass");
+        return this;
+    }
+
+    @Override
+    public void render(Shader shader, Camera camera, Matrix4f view) {
+        super.render(shader, camera, view);
     }
 
     @Override

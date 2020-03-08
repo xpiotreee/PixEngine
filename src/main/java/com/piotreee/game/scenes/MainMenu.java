@@ -16,7 +16,7 @@ public class MainMenu extends GameScene {
     }
 
     @Override
-    public void update(double delta, Input input) {
+    public void update(float delta, Input input) {
         super.update(delta, input);
         fps.setText("FPS: " + LwjglApplication.INSTANCE.getFPS());
     }

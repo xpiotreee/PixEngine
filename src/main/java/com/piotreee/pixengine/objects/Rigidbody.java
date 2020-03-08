@@ -4,8 +4,8 @@ import org.joml.Vector2f;
 
 public class Rigidbody {
     private Vector2f velocity = new Vector2f();
-    private float minVel = 0.011f;
-    private float maxVel = 0.3f;
+    private float minVel = 0.05f;
+    private float maxVel = 3f;
 
     public Vector2f getVelocity() {
         return velocity;
@@ -27,7 +27,7 @@ public class Rigidbody {
         velocity.add(velX, velY);
     }
 
-    public void move(Vector2f position, float drag, double delta) {
+    public void move(Vector2f position, float drag, float delta) {
         float x = velocity.x;
         float y = velocity.y;
 
@@ -42,9 +42,9 @@ public class Rigidbody {
         }
 
         if (x > 0) {
-            x -= drag;
+            x -= drag * delta;
         } else if (x < 0) {
-            x += drag;
+            x += drag * delta;
         }
 
         if (y > maxVel) {
@@ -58,12 +58,12 @@ public class Rigidbody {
         }
 
         if (y > 0) {
-            y -= drag;
+            y -= drag * delta;
         } else if (y < 0) {
-            y += drag;
+            y += drag * delta;
         }
 
         velocity.set(x, y);
-        position.add(velocity.mul((float) delta));
+        position.add(velocity.x * delta, velocity.y * delta);
     }
 }

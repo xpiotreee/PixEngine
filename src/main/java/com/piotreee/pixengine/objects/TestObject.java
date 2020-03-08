@@ -30,11 +30,6 @@ public class TestObject implements GameObject, Renderable {
     }
 
     @Override
-    public void update(double delta) {
-
-    }
-
-    @Override
     public Transform getTransform() {
         return transform;
     }

@@ -20,17 +20,20 @@ public class TestGameObject implements GameObject {
     }
 
     protected void createFromPacket(AddGameObjectPacket p) {
-        transform.position.set(p.getPosX(), p.getPosY());
-        transform.scale.set(p.getScaleX(), p.getScaleY());
+        transform.position.set(p.getPosition());
+        transform.scale.set(p.getScale());
         transform.setRotation(p.getRotation());
         this.id = p.getGameObjectId();
-        this.getRigidbody().ifPresent(rb -> rb.setVelocity(p.getVelX(), p.getVelY()));
+        this.getRigidbody().ifPresent(rb -> rb.setVelocity(p.getVelocity()));
     }
 
     public void updateFromPacket(UpdateGameObjectPacket p) {
-        transform.position.set(p.getPosX(), p.getPosY());
+        if (transform.position.distance(p.getPosition()) > 0.75f) {
+            transform.position.set(p.getPosition());
+        }
+
         transform.setRotation(p.getRotation());
-        this.getRigidbody().ifPresent(rb -> rb.setVelocity(p.getVelX(), p.getVelY()));
+        this.getRigidbody().ifPresent(rb -> rb.setVelocity(p.getVelocity()));
     }
 
     @Override

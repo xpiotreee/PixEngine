@@ -3,6 +3,7 @@ package com.piotreee.game.scenes;
 import com.piotreee.game.client.GameClient;
 import com.piotreee.game.objects.Player;
 import com.piotreee.game.objects.TestGameObject;
+import com.piotreee.game.packets.TileActionPacket;
 import com.piotreee.game.server.GameServer;
 import com.piotreee.pixengine.gui.Alignment;
 import com.piotreee.pixengine.gui.Text;
@@ -10,11 +11,11 @@ import com.piotreee.pixengine.io.Input;
 import com.piotreee.pixengine.io.Window;
 import com.piotreee.pixengine.objects.GameScene;
 import com.piotreee.pixengine.objects.Tile;
+import com.piotreee.pixengine.objects.TileMap;
 import com.piotreee.pixengine.objects.Updatable;
 import org.joml.Matrix4f;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Game extends GameScene {
     public static boolean isSingleplayer = true;
@@ -26,24 +27,43 @@ public class Game extends GameScene {
 
     private Text connectedCount;
 
-    private List<Tile> tiles = new ArrayList<>();
-    private int tilesSize = 0;
+    private TileMap tileMap = new TileMap();
 
     public Game(Window window) {
         super(window);
     }
 
     @Override
-    public void update(double delta, Input input) {
+    public void update(float delta, Input input) {
         super.update(delta, input);
+
+        if (input.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+            tileMap.getTile(input.getMouseWorldPos()).ifPresent(
+                    tile -> client.send(new TileActionPacket((byte) GLFW_MOUSE_BUTTON_LEFT, tile.getPosition()))
+            );
+        }
+
+        if (input.isMouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
+            tileMap.getTile(input.getMouseWorldPos()).ifPresent(
+                    tile -> client.send(new TileActionPacket((byte) GLFW_MOUSE_BUTTON_RIGHT, tile.getPosition()))
+            );
+        }
+
+        if (input.isMouseButtonPressed(GLFW_MOUSE_BUTTON_MIDDLE)) {
+            tileMap.getTile(input.getMouseWorldPos()).ifPresent(
+                    tile -> client.send(new TileActionPacket((byte) GLFW_MOUSE_BUTTON_MIDDLE, tile.getPosition()))
+            );
+        }
+
         client.update(delta, input);
     }
 
     @Override
     public void render(Matrix4f view) {
         shader.bind();
-        for (int i = 0; i < tilesSize; i++) {
-            tiles.get(i).render(shader, camera, view);
+        Tile[] tiles = tileMap.getTiles();
+        for (int i = 0; i < tiles.length; i++) {
+            tiles[i].render(shader, camera, view);
         }
 
         super.render(view);
@@ -75,14 +95,8 @@ public class Game extends GameScene {
         super.remove(getGameObject(id));
     }
 
-    public void addTile(Tile tile) {
-        tiles.add(tile);
-        tilesSize++;
-    }
-
-    public void removeTile(Tile tile) {
-        tiles.remove(tile);
-        tilesSize--;
+    public TileMap getTileMap() {
+        return tileMap;
     }
 
     public Text getConnectedCount() {
