@@ -2,7 +2,7 @@ package com.piotreee.pixengine.gui;
 
 import com.piotreee.pixengine.LwjglApplication;
 import com.piotreee.pixengine.io.Input;
-import com.piotreee.pixengine.math.Rectangle;
+import com.piotreee.pixengine.math.Collider;
 import com.piotreee.pixengine.objects.Sheet;
 import com.piotreee.pixengine.objects.Updatable;
 import com.piotreee.pixengine.render.Camera;
@@ -23,7 +23,7 @@ public class Button extends Panel implements Updatable {
     private final static int STATE_IDLE = 0;
     private final static int STATE_SELECTED = 1;
     private final static int STATE_CLICKED = 2;
-    private Rectangle collider;
+    private Collider collider;
     private int selectedState;
     private ButtonCallback callback;
 
@@ -41,7 +41,7 @@ public class Button extends Panel implements Updatable {
 
     public Button(Alignment alignment, Vector2f position, Vector2f size, Sheet<Texture> textureSheet, ButtonCallback callback) {
         super(alignment, position, size, textureSheet);
-        this.collider = new Rectangle(position, size);
+        this.collider = new Collider(position.x, position.y, size.x, size.y);
         this.selectedState = STATE_IDLE;
         this.callback = callback;
     }
@@ -72,7 +72,7 @@ public class Button extends Panel implements Updatable {
     @Override
     public void updateRenderPosition() {
         super.updateRenderPosition();
-        collider.setPosition(renderPosition.x - collider.width / 2f, renderPosition.y - collider.height / 2f);
+        collider.setPosition(renderPosition.x - collider.size.x / 2f, renderPosition.y - collider.size.y / 2f);
     }
 
     @Override

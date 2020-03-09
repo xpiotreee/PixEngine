@@ -3,6 +3,7 @@ package com.piotreee.game;
 import com.piotreee.game.objects.Papierz;
 import com.piotreee.game.objects.Player;
 import com.piotreee.game.objects.TestGameObject;
+import com.piotreee.game.objects.tiles.Bricks;
 import com.piotreee.game.objects.tiles.Dirt;
 import com.piotreee.game.objects.tiles.Grass;
 import com.piotreee.game.packets.*;
@@ -49,5 +50,6 @@ public class Main {
     private static void registerTiles() {
         tileRegistry.register(0, Grass.class);
         tileRegistry.register(1, Dirt.class);
+        tileRegistry.register(2, Bricks.class);
     }
 }

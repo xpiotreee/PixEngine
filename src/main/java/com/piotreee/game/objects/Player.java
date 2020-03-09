@@ -2,6 +2,7 @@ package com.piotreee.game.objects;
 
 import com.piotreee.game.packets.AddGameObjectPacket;
 import com.piotreee.game.packets.InputPacket;
+import com.piotreee.pixengine.math.Collider;
 import com.piotreee.pixengine.objects.Rigidbody;
 import com.piotreee.pixengine.render.Camera;
 import com.piotreee.pixengine.render.Renderable;
@@ -16,8 +17,9 @@ import java.util.Optional;
 
 public class Player extends TestGameObject implements Renderable {
     private static final Font FONT = Resources.getFont("font");
-    private static final float SPEED = 3f;//0.015f;
+    private static final float SPEED = 5f;//0.015f;
     private InputPacket input;
+    private Collider collider;
     private Rigidbody rigidbody;
     private Renderable renderable;
 
@@ -29,6 +31,8 @@ public class Player extends TestGameObject implements Renderable {
         super(id, 2);
         this.rigidbody = new Rigidbody();
         this.input = new InputPacket((byte) 0, (byte) 0);
+//        this.collider = new Rectangle(transform.position.x - 0.9f, transform.position.y - 0.9f, 0.8f, 0.8f);
+        this.collider = new Collider(transform.position, transform.scale);
     }
 
     @Override
@@ -48,7 +52,7 @@ public class Player extends TestGameObject implements Renderable {
 
 //        System.out.println("player pos: x: " + transform.position.x + " y: " + transform.position.y);
 
-        rigidbody.move(transform.position, 2f, delta);
+        rigidbody.move(this, 3f, delta);
     }
 
     @Override
@@ -61,6 +65,8 @@ public class Player extends TestGameObject implements Renderable {
     @Override
     protected void createFromPacket(AddGameObjectPacket p) {
         this.rigidbody = new Rigidbody();
+//        this.collider = new Rectangle(transform.position.x - 0.9f, transform.position.y - 0.9f, 0.8f, 0.8f);
+        this.collider = new Collider(transform.position, transform.scale);
         this.input = new InputPacket((byte) 0, (byte) 0);
         super.createFromPacket(p);
         this.renderable = new Sprite(transform, Resources.getTexture("test"));
@@ -73,5 +79,10 @@ public class Player extends TestGameObject implements Renderable {
     @Override
     public Optional<Rigidbody> getRigidbody() {
         return Optional.of(rigidbody);
+    }
+
+    @Override
+    public Optional<Collider> getCollider() {
+        return Optional.ofNullable(collider);
     }
 }

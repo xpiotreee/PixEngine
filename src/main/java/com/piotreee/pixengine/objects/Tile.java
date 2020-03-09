@@ -1,9 +1,12 @@
 package com.piotreee.pixengine.objects;
 
 import com.piotreee.game.packets.SetTilePacket;
+import com.piotreee.pixengine.math.Collider;
 import com.piotreee.pixengine.render.*;
 import org.joml.Matrix4f;
 import org.joml.Vector2i;
+
+import java.util.Optional;
 
 public abstract class Tile implements Renderable {
     protected int type;
@@ -39,6 +42,8 @@ public abstract class Tile implements Renderable {
     }
 
     protected abstract Visual getVisual();
+
+    public abstract Optional<Collider> getCollider();
 
     public int getType() {
         return type;

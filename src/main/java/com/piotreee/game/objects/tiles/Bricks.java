@@ -1,34 +1,26 @@
 package com.piotreee.game.objects.tiles;
 
 import com.piotreee.game.packets.SetTilePacket;
-import com.piotreee.pixengine.math.Collider;
 import com.piotreee.pixengine.objects.Tile;
 import com.piotreee.pixengine.render.Visual;
 import com.piotreee.pixengine.util.Resources;
 import org.joml.Vector2i;
 
-import java.util.Optional;
-
-public class Dirt extends Tile {
+public class Bricks extends CollidableTile {
     private Visual visual;
 
-    public Dirt(SetTilePacket packet) {
+    public Bricks(SetTilePacket packet) {
         super(packet);
     }
 
-    public Dirt(Vector2i position) {
-        super(1, position);
+    public Bricks(Vector2i position) {
+        super(2, position);
     }
 
     @Override
-    public Tile init() {
-        this.visual = Resources.getTexture("dirt");
+    protected Tile init() {
+        this.visual = Resources.getTexture("bricks");
         return this;
-    }
-
-    @Override
-    public Optional<Collider> getCollider() {
-        return Optional.empty();
     }
 
     @Override

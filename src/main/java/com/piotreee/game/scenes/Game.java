@@ -18,6 +18,7 @@ import org.joml.Matrix4f;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Game extends GameScene {
+    public static Game INSTANCE;
     public static boolean isSingleplayer = true;
     public static String host;
     public static int port;
@@ -31,6 +32,7 @@ public class Game extends GameScene {
 
     public Game(Window window) {
         super(window);
+        INSTANCE = this;
     }
 
     @Override

@@ -4,7 +4,9 @@ import com.piotreee.game.objects.tiles.Grass;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 public class TileMap {
@@ -63,6 +65,23 @@ public class TileMap {
 
     public synchronized Tile[] getTiles() {
         return tiles.values().toArray(new Tile[]{});
+    }
+
+    public Optional<Tile>[] getTiles(int startX, int startY, int endX, int endY) {
+        int width = endX - startX;
+        int height = endY - startY;
+        List<Optional<Tile>> tileList = new ArrayList<>(width * height);
+        for (int x = startX; x < endX; x++) {
+            for (int y = startY; y < endY; y++) {
+                tileList.add(getTile(x, y));
+            }
+        }
+
+        return tileList.toArray(new Optional[]{});
+    }
+
+    public Optional<Tile>[] getTiles(Vector2i start, Vector2i end) {
+        return getTiles(start.x, start.y, end.x, end.y);
     }
 
 }

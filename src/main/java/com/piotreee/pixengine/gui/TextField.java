@@ -2,7 +2,7 @@ package com.piotreee.pixengine.gui;
 
 import com.piotreee.pixengine.LwjglApplication;
 import com.piotreee.pixengine.io.Input;
-import com.piotreee.pixengine.math.Rectangle;
+import com.piotreee.pixengine.math.Collider;
 import com.piotreee.pixengine.objects.Sheet;
 import com.piotreee.pixengine.objects.Updatable;
 import com.piotreee.pixengine.render.Camera;
@@ -26,7 +26,7 @@ public class TextField extends Panel implements Updatable {
     private final static Vector4f COLOR_CLICKED = new Vector4f(-0.5f, -0.5f, -0.5f, 0);
 
     private int currentState = STATE_IDLE;
-    private Rectangle collider;
+    private Collider collider;
     private String text = "";
     private Font font;
 
@@ -53,7 +53,7 @@ public class TextField extends Panel implements Updatable {
     public TextField(Font font, Alignment alignment, Vector2f position, Vector2f size, Sheet<Texture> textureSheet) {
         super(alignment, position, size, textureSheet);
         this.font = font;
-        this.collider = new Rectangle(position, size);
+        this.collider = new Collider(position, size);
     }
 
     @Override
@@ -93,7 +93,8 @@ public class TextField extends Panel implements Updatable {
     @Override
     public void updateRenderPosition() {
         super.updateRenderPosition();
-        collider.setPosition(renderPosition.x - collider.width / 2f, renderPosition.y - collider.height / 2f);
+        collider.setPosition(renderPosition.x - collider.size.x / 2f, renderPosition.y - collider.size.y / 2f);
+//        renderPosition.sub(collider.size.mul(1/2f, new Vector2f()), collider.position);
     }
 
     @Override
