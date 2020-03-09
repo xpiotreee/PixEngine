@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GameServer extends Server {
+    public static GameServer INSTANCE;
     public static int IDs = 0;
     private TileMap tileMap = new TileMap(16, 16);
     private HashMap<Channel, Player> players = new HashMap<>();
@@ -26,6 +27,7 @@ public class GameServer extends Server {
 
     public GameServer(int port) {
         super(port);
+        INSTANCE = this;
         addGameObject(new Papierz(IDs++, 0, 0, 3, 3, 0));
         addGameObject(new Papierz(IDs++, 3, -1, 2, 1, 45));
         addListeners(new InputListener(this), new TileActionListener(this));
@@ -68,7 +70,7 @@ public class GameServer extends Server {
 
         for (int i = 0; i < gameObjectsSize; i++) {
             TestGameObject gameObject = gameObjects.get(i);
-            gameObject.update(delta);
+            gameObject.update(delta, true);
             sendAll(new UpdateGameObjectPacket(gameObject));
         }
     }

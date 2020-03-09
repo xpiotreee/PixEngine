@@ -24,6 +24,11 @@ public class Bricks extends CollidableTile {
     }
 
     @Override
+    public float getDrag() {
+        return 2;
+    }
+
+    @Override
     protected Visual getVisual() {
         return visual;
     }

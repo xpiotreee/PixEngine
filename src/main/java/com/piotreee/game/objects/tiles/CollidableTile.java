@@ -8,7 +8,7 @@ import org.joml.Vector2i;
 
 import java.util.Optional;
 
-public class CollidableTile extends Tile {
+public abstract class CollidableTile extends Tile {
     private Collider collider;
 
     public CollidableTile(SetTilePacket packet) {

@@ -36,7 +36,7 @@ public class Player extends TestGameObject implements Renderable {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(float delta, boolean isServer) {
         float fixedSpeed = SPEED * delta;
         if (input.getMoveHorizontally() > 0) {
             rigidbody.addVelocity(fixedSpeed, 0);
@@ -52,7 +52,7 @@ public class Player extends TestGameObject implements Renderable {
 
 //        System.out.println("player pos: x: " + transform.position.x + " y: " + transform.position.y);
 
-        rigidbody.move(this, 3f, delta);
+        rigidbody.move(this, delta, isServer);
     }
 
     @Override

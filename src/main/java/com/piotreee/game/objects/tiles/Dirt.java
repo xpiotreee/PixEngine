@@ -32,6 +32,11 @@ public class Dirt extends Tile {
     }
 
     @Override
+    public float getDrag() {
+        return 2;
+    }
+
+    @Override
     protected Visual getVisual() {
         return visual;
     }

@@ -43,6 +43,8 @@ public abstract class Tile implements Renderable {
 
     protected abstract Visual getVisual();
 
+    public abstract float getDrag();
+
     public abstract Optional<Collider> getCollider();
 
     public int getType() {

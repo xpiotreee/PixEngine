@@ -35,9 +35,9 @@ public abstract class GameScene {
 
     public void update(float delta, Input input) {
         camera.update();
-        gui.update(delta);
+        gui.update(delta, false);
         for (int i = 0; i < updatablesSize; i++) {
-            updatables.get(i).update(delta);
+            updatables.get(i).update(delta, false);
         }
     }
 

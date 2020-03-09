@@ -14,6 +14,9 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public class TextField extends Panel implements Updatable {
@@ -57,7 +60,7 @@ public class TextField extends Panel implements Updatable {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(float delta, boolean isServer) {
         Input input = LwjglApplication.INSTANCE.getInput();
         if (collider.contains(input.getMousePos()) && currentState != STATE_CLICKED) {
             if (input.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -76,7 +79,13 @@ public class TextField extends Panel implements Updatable {
                             return;
                         }
 
-                        text += (char) key;
+                        if (key > 255) {
+                            return;
+                        }
+
+                        text += input.isKeyDown(GLFW_KEY_LEFT_SHIFT) || input.isKeyDown(GLFW_KEY_RIGHT_SHIFT) || Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)
+                                ? (char) key
+                                : Character.toLowerCase((char) key);
                         System.out.println(text);
                     }
                 });
@@ -94,7 +103,6 @@ public class TextField extends Panel implements Updatable {
     public void updateRenderPosition() {
         super.updateRenderPosition();
         collider.setPosition(renderPosition.x - collider.size.x / 2f, renderPosition.y - collider.size.y / 2f);
-//        renderPosition.sub(collider.size.mul(1/2f, new Vector2f()), collider.position);
     }
 
     @Override

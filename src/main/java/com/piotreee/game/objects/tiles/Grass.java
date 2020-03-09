@@ -40,6 +40,11 @@ public class Grass extends Tile {
     }
 
     @Override
+    public float getDrag() {
+        return 3;
+    }
+
+    @Override
     protected Visual getVisual() {
         return visual;
     }

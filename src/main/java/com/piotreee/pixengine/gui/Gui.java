@@ -33,7 +33,7 @@ public class Gui implements Updatable {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(float delta, boolean isServer) {
         if (window.hasResized()) {
             camera.setProjection(window.getWidth(), window.getHeight());
             guiAlignment.fixAlignments();
@@ -43,7 +43,7 @@ public class Gui implements Updatable {
         }
 
         for (int i = 0; i < updatablesSize; i++) {
-            updatables.get(i).update(delta);
+            updatables.get(i).update(delta, isServer);
         }
     }
 

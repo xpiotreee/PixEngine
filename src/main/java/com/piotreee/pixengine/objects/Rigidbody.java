@@ -2,11 +2,13 @@ package com.piotreee.pixengine.objects;
 
 import com.piotreee.game.objects.TestGameObject;
 import com.piotreee.game.scenes.Game;
+import com.piotreee.game.server.GameServer;
 import com.piotreee.pixengine.math.Collider;
 import org.joml.Vector2f;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Rigidbody {
     private Vector2f velocity = new Vector2f();
@@ -33,10 +35,22 @@ public class Rigidbody {
         velocity.add(velX, velY);
     }
 
-    public void move(TestGameObject gameObject, float drag, float delta) {
+    public void move(TestGameObject gameObject, float delta, boolean isServer) {
         Vector2f position = gameObject.getTransform().position;
+        TileMap tileMap;
+        if (isServer) {
+            tileMap = GameServer.INSTANCE.getTileMap();
+        } else {
+            tileMap = Game.INSTANCE.getTileMap();
+        }
+
+        AtomicReference<Float> fixedDrag = new AtomicReference<>(0f);
+        tileMap.getTile(position).ifPresentOrElse(tile -> fixedDrag.set(tile.getDrag() * delta), () -> fixedDrag.set(1f * delta));
+        System.out.println(fixedDrag.get());
+
         float x = velocity.x;
         float y = velocity.y;
+
 
         if (x > maxVel) {
             x = maxVel;
@@ -49,9 +63,9 @@ public class Rigidbody {
         }
 
         if (x > 0) {
-            x -= drag * delta;
+            x -= fixedDrag.get();
         } else if (x < 0) {
-            x += drag * delta;
+            x += fixedDrag.get();
         }
 
         if (y > maxVel) {
@@ -65,26 +79,10 @@ public class Rigidbody {
         }
 
         if (y > 0) {
-            y -= drag * delta;
+            y -= fixedDrag.get();
         } else if (y < 0) {
-            y += drag * delta;
+            y += fixedDrag.get();
         }
-
-//        velocity.set(x, y);
-//        Vector2f fixedVelocity = velocity.mul(delta, new Vector2f());
-//        Vector2f testPosition = gameObject.getTransform().position.add(fixedVelocity, new Vector2f());
-//        gameObject.getCollider().ifPresent(collider -> {
-//            int tileX = Math.round(testPosition.x);
-//            int tileY = Math.round(testPosition.y);
-//            Optional[] tiles = Game.INSTANCE.getTileMap().getTiles(tileX - 2, tileY - 2, tileX + 2, tileY + 2);
-//            for (int i = 0; i < tiles.length; i++) {
-//                ((Optional<Tile>) tiles[i]).flatMap(Tile::getCollider).ifPresent(tileCollider -> {
-//                    if (tileCollider.overlaps(new Rectangle(testPosition.x - 0.9f, testPosition.y - 0.9f, collider.width, collider.height))) {
-//                        testPosition.set(gameObject.getTransform().position);
-//                    }
-//                });
-//            }
-//        });
 
         velocity.set(x, y);
         Vector2f fixedVelocity = velocity.mul(delta, new Vector2f());
@@ -95,8 +93,7 @@ public class Rigidbody {
             AtomicBoolean collides = new AtomicBoolean(false);
             int tileX = Math.round(position.x);
             int tileY = Math.round(position.y);
-            Optional[] tiles = Game.INSTANCE.getTileMap().getTiles(tileX - 2, tileY - 2, tileX + 2, tileY + 2);
-
+            Optional[] tiles = tileMap.getTiles(tileX - 2, tileY - 2, tileX + 2, tileY + 2);
             for (int i = 0; i < tiles.length && !collides.get(); i++) {
                 ((Optional<Tile>) tiles[i]).flatMap(Tile::getCollider).ifPresent(tileCollider -> {
                     if (collider.overlaps(tileCollider)) {

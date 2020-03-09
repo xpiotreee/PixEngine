@@ -63,8 +63,8 @@ public class LwjglApplication {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_TEXTURE_2D);
 //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-//        glClearColor(0.25f, 0.25f, 0.25f, 0.0f);
-        glClearColor(0, 0, 0, 0);
+        glClearColor(0.25f, 0.25f, 0.25f, 0.0f);
+//        glClearColor(0, 0, 0, 0);
         view = new Matrix4f().setTranslation(new Vector3f(0));
         view.scale(scale);
 
