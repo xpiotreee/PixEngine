@@ -10,6 +10,7 @@ import com.piotreee.game.packets.TileActionPacket;
 import com.piotreee.game.server.GameServer;
 import com.piotreee.pixengine.gui.Alignment;
 import com.piotreee.pixengine.gui.Text;
+import com.piotreee.pixengine.gui.TextAlignment;
 import com.piotreee.pixengine.io.Input;
 import com.piotreee.pixengine.io.Window;
 import com.piotreee.pixengine.objects.GameScene;
@@ -25,9 +26,10 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Game extends GameScene {
     public static Game INSTANCE;
-    public static boolean isSingleplayer = true;
+    public static boolean isSingleplayer;
     public static String host;
     public static int port;
+    public static String username;
 
     private GameServer server;
     private GameClient client;
@@ -74,10 +76,6 @@ public class Game extends GameScene {
     @Override
     public void render(Matrix4f view) {
         shader.bind();
-//        Tile[] tiles = tileMap.getTiles();
-//        for (int i = 0; i < tiles.length; i++) {
-//            tiles[i].render(shader, camera, view);
-//        }
         if (client.getPlayer() == null) {
             return;
         }
@@ -97,14 +95,12 @@ public class Game extends GameScene {
     public void load() {
         if (isSingleplayer) {
             new Thread(server = new GameServer(2137)).start();
-            host = "localhost";
-            port = 2137;
         }
 
         new Thread(client = new GameClient(host, port, this)).start();
 
-        gui.add(connectedCount = new Text("Connected: ", Alignment.LEFT, 16, 0, 128, 32));
-        gui.add(new Text("Connected to: " + host + ":" + port, Alignment.BOTTOM_LEFT, 16, 16, 128, 32));
+        gui.add(connectedCount = new Text(TextAlignment.LEFT, "Connected: ", Alignment.LEFT, 16, 0));
+        gui.add(new Text(TextAlignment.LEFT, "Connected to: " + host + ":" + port, Alignment.BOTTOM_LEFT, 16, 16));
     }
 
     @Override

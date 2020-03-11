@@ -63,14 +63,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     public void sendAll(Packet packet) {
-        byte[] data = packet.writeData();
+        byte[] data = packet.getData();
         for (Channel channel : channels) {
             channel.writeAndFlush(data);
         }
     }
 
     public void sendAllExcept(Packet packet, Channel except) {
-        byte[] data = packet.writeData();
+        byte[] data = packet.getData();
         for (Channel channel : channels) {
             if (channel.equals(except)) {
                 continue;

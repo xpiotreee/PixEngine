@@ -57,7 +57,7 @@ public class Client implements Runnable {
     }
 
     public void send(Packet packet) {
-        channel.writeAndFlush(packet.writeData());
+        channel.writeAndFlush(packet.getData());
     }
 
     public void addListeners(PacketListener... packetListeners) {

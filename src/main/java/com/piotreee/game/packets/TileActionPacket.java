@@ -27,7 +27,7 @@ public class TileActionPacket extends Packet {
     public ByteBuffer writeData(ByteBuffer buffer) {
         super.writeData(buffer);
         buffer.put(action);
-        writeVector2i(buffer, position);
+        writeVector2i(position);
         return buffer;
     }
 

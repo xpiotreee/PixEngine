@@ -12,9 +12,8 @@ public class AddGameObjectPacket extends UpdateGameObjectPacket {
 
     public AddGameObjectPacket(TestGameObject gameObject) {
         this(gameObject.getId(), gameObject.getTransform(), new Vector2f(), gameObject.getType());
-        Vector2f vel = new Vector2f();
-        gameObject.getRigidbody().ifPresent(rb -> vel.set(rb.getVelocity()));
-        this.velocity = vel;
+        gameObject.getRigidbody().ifPresent(rb -> velocity.set(rb.getVelocity()));
+        gameObject.createPacket((AddGameObjectPacket) this.writeData());
     }
 
     public AddGameObjectPacket(int id, Transform transform, Vector2f velocity, int type) {
@@ -43,7 +42,7 @@ public class AddGameObjectPacket extends UpdateGameObjectPacket {
     @Override
     public ByteBuffer writeData(ByteBuffer buffer) {
         super.writeData(buffer);
-        writeVector2f(buffer, scale);
+        writeVector2f(scale);
         buffer.putInt(type);
         return buffer;
     }
@@ -51,7 +50,7 @@ public class AddGameObjectPacket extends UpdateGameObjectPacket {
     @Override
     public void readData(ByteBuffer buffer) {
         super.readData(buffer);
-        scale = readVector2f(buffer);
+        scale = readVector2f();
         this.type = buffer.getInt();
     }
 

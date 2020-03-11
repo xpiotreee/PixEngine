@@ -17,7 +17,9 @@ import java.util.Optional;
 
 public class Player extends TestGameObject implements Renderable {
     private static final Font FONT = Resources.getFont("font");
-    private static final float SPEED = 5f;//0.015f;
+    private String username;
+    private float offsetX;
+    private float speed = 5f;
     private InputPacket input;
     private Collider collider;
     private Rigidbody rigidbody;
@@ -27,8 +29,9 @@ public class Player extends TestGameObject implements Renderable {
         super(p);
     }
 
-    public Player(int id) {
+    public Player(int id, String username) {
         super(id, 2);
+        this.username = username;
         this.rigidbody = new Rigidbody();
         this.input = new InputPacket((byte) 0, (byte) 0);
 //        this.collider = new Rectangle(transform.position.x - 0.9f, transform.position.y - 0.9f, 0.8f, 0.8f);
@@ -37,7 +40,7 @@ public class Player extends TestGameObject implements Renderable {
 
     @Override
     public void update(float delta, boolean isServer) {
-        float fixedSpeed = SPEED * delta;
+        float fixedSpeed = speed * delta;
         if (input.getMoveHorizontally() > 0) {
             rigidbody.addVelocity(fixedSpeed, 0);
         } else if (input.getMoveHorizontally() < 0) {
@@ -50,8 +53,6 @@ public class Player extends TestGameObject implements Renderable {
             rigidbody.addVelocity(0, -fixedSpeed);
         }
 
-//        System.out.println("player pos: x: " + transform.position.x + " y: " + transform.position.y);
-
         rigidbody.move(this, delta, isServer);
     }
 
@@ -59,17 +60,24 @@ public class Player extends TestGameObject implements Renderable {
     public void render(Shader shader, Camera camera, Matrix4f view) {
         renderable.render(shader, camera, view);
         Vector3f scale = view.getScale(new Vector3f());
-        FONT.drawText("id: " + id, transform.position.x - 32 / scale.x, transform.position.y - 32 / scale.y, shader, camera, view);
+        FONT.drawText(username, transform.position.x - offsetX / scale.x, transform.position.y - 32 / scale.y, shader, camera, view);
     }
 
     @Override
     protected void createFromPacket(AddGameObjectPacket p) {
         this.rigidbody = new Rigidbody();
-//        this.collider = new Rectangle(transform.position.x - 0.9f, transform.position.y - 0.9f, 0.8f, 0.8f);
         this.collider = new Collider(transform.position, transform.scale);
         this.input = new InputPacket((byte) 0, (byte) 0);
         super.createFromPacket(p);
+        this.username = p.readString();
+        this.offsetX = FONT.calcStringWidth(username);
         this.renderable = new Sprite(transform, Resources.getTexture("test"));
+    }
+
+    @Override
+    public void createPacket(AddGameObjectPacket p) {
+        System.out.println("create player packet");
+        p.writeString(username);
     }
 
     public void setInput(InputPacket input) {

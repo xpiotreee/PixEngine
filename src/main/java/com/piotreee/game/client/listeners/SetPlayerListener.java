@@ -1,5 +1,6 @@
 package com.piotreee.game.client.listeners;
 
+import com.piotreee.game.packets.JoinPacket;
 import com.piotreee.game.packets.SetPlayerPacket;
 import com.piotreee.game.scenes.Game;
 import com.piotreee.pixengine.networking.PacketListener;
@@ -11,6 +12,11 @@ public class SetPlayerListener extends PacketListener<SetPlayerPacket> {
     public SetPlayerListener(Game game) {
         super(SetPlayerPacket.class);
         this.game = game;
+    }
+
+    @Override
+    public void active(ChannelHandlerContext ctx) {
+        ctx.writeAndFlush(new JoinPacket(Game.username).writeData().getData());
     }
 
     @Override

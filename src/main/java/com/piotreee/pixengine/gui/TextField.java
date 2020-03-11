@@ -56,7 +56,7 @@ public class TextField extends Panel implements Updatable {
     public TextField(Font font, Alignment alignment, Vector2f position, Vector2f size, Sheet<Texture> textureSheet) {
         super(alignment, position, size, textureSheet);
         this.font = font;
-        this.collider = new Collider(position, size);
+        this.collider = new Collider(position.x, position.y, size.x, size.y);
     }
 
     @Override

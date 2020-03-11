@@ -34,8 +34,8 @@ public class UpdateGameObjectPacket extends Packet {
     public void readData(ByteBuffer buffer) {
         super.readData(buffer);
         this.gameObjectId = buffer.getInt();
-        this.position = readVector2f(buffer);
-        this.velocity = readVector2f(buffer);
+        this.position = readVector2f();
+        this.velocity = readVector2f();
         this.rotation = buffer.getFloat();
     }
 
@@ -43,8 +43,8 @@ public class UpdateGameObjectPacket extends Packet {
     public ByteBuffer writeData(ByteBuffer buffer) {
         super.writeData(buffer);
         buffer.putInt(gameObjectId);
-        writeVector2f(buffer, position);
-        writeVector2f(buffer, velocity);
+        writeVector2f(position);
+        writeVector2f(velocity);
         buffer.putFloat(rotation);
         return buffer;
     }

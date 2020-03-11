@@ -39,6 +39,7 @@ public class Main {
         Network.packetRegistry.register(5, RemoveGameObjectPacket.class);
         Network.packetRegistry.register(6, SetTilePacket.class);
         Network.packetRegistry.register(7, TileActionPacket.class);
+        Network.packetRegistry.register(8, JoinPacket.class);
     }
 
     private static void registerGameObjects() {

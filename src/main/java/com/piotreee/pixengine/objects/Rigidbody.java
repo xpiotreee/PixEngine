@@ -44,9 +44,8 @@ public class Rigidbody {
             tileMap = Game.INSTANCE.getTileMap();
         }
 
-        AtomicReference<Float> fixedDrag = new AtomicReference<>(0f);
-        tileMap.getTile(position).ifPresentOrElse(tile -> fixedDrag.set(tile.getDrag() * delta), () -> fixedDrag.set(1f * delta));
-        System.out.println(fixedDrag.get());
+        AtomicReference<Float> fixedDrag = new AtomicReference<>(1f * delta);
+        tileMap.getTile(position).ifPresent(tile -> fixedDrag.set(tile.getDrag() * delta));
 
         float x = velocity.x;
         float y = velocity.y;

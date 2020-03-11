@@ -72,4 +72,19 @@ public class Font {
     public void setLetters(Letter[] letters) {
         this.letters = letters;
     }
+
+    public int calcStringWidth(String string) {
+        int width = 0;
+        char[] chars = string.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == ' ') {
+                width += 20;
+            } else {
+                width += getLetter(chars[i]).getTexture().getWidth();
+            }
+
+        }
+
+        return width;
+    }
 }

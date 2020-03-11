@@ -27,6 +27,10 @@ public class TestGameObject implements GameObject {
         this.getRigidbody().ifPresent(rb -> rb.setVelocity(p.getVelocity()));
     }
 
+    public void createPacket(AddGameObjectPacket p) {
+
+    }
+
     public void updateFromPacket(UpdateGameObjectPacket p) {
 //        if (transform.position.distance(p.getPosition()) > 0.1f) {
             transform.position.set(p.getPosition());

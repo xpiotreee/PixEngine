@@ -6,6 +6,7 @@ import com.piotreee.game.objects.TestGameObject;
 import com.piotreee.game.packets.RemoveGameObjectPacket;
 import com.piotreee.game.packets.UpdateGameObjectPacket;
 import com.piotreee.game.server.listeners.InputListener;
+import com.piotreee.game.server.listeners.JoinListener;
 import com.piotreee.game.server.listeners.TileActionListener;
 import com.piotreee.pixengine.networking.Server;
 import com.piotreee.pixengine.objects.TileMap;
@@ -30,7 +31,7 @@ public class GameServer extends Server {
         INSTANCE = this;
         addGameObject(new Papierz(IDs++, 0, 0, 3, 3, 0));
         addGameObject(new Papierz(IDs++, 3, -1, 2, 1, 45));
-        addListeners(new InputListener(this), new TileActionListener(this));
+        addListeners(new InputListener(this), new TileActionListener(this), new JoinListener(this));
 
     }
 
