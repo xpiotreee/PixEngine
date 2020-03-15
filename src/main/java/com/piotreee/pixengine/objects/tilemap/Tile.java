@@ -1,4 +1,4 @@
-package com.piotreee.pixengine.objects;
+package com.piotreee.pixengine.objects.tilemap;
 
 import com.piotreee.game.packets.SetTilePacket;
 import com.piotreee.pixengine.math.Collider;
@@ -13,7 +13,7 @@ public abstract class Tile implements Renderable {
     protected Vector2i position;
 
     public Tile(SetTilePacket packet) {
-        this(packet.getType(), new Vector2i(packet.getX(), packet.getY()));
+        this(packet.getType(), packet.getPosition());
         init();
     }
 

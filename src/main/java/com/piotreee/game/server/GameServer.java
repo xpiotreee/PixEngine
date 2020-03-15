@@ -9,7 +9,7 @@ import com.piotreee.game.server.listeners.InputListener;
 import com.piotreee.game.server.listeners.JoinListener;
 import com.piotreee.game.server.listeners.TileActionListener;
 import com.piotreee.pixengine.networking.Server;
-import com.piotreee.pixengine.objects.TileMap;
+import com.piotreee.pixengine.objects.tilemap.TileMap;
 import io.netty.channel.Channel;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.List;
 public class GameServer extends Server {
     public static GameServer INSTANCE;
     public static int IDs = 0;
-    private TileMap tileMap = new TileMap(16, 16);
+    private TileMap tileMap = new TileMap(2, 2);
     private HashMap<Channel, Player> players = new HashMap<>();
     private List<TestGameObject> gameObjects = new ArrayList<>();
     private int gameObjectsSize = 0;
@@ -29,9 +29,14 @@ public class GameServer extends Server {
     public GameServer(int port) {
         super(port);
         INSTANCE = this;
-        addGameObject(new Papierz(IDs++, 0, 0, 3, 3, 0));
+        addGameObject(new Papierz(IDs++, -5, 0, 3, 3, 0));
         addGameObject(new Papierz(IDs++, 3, -1, 2, 1, 45));
-        addListeners(new InputListener(this), new TileActionListener(this), new JoinListener(this));
+        addListeners(
+                new InputListener(this),
+                new TileActionListener(this),
+                new JoinListener(this)
+//                new ChunkListener(this)
+        );
 
     }
 

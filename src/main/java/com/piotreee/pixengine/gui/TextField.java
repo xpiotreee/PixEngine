@@ -86,7 +86,6 @@ public class TextField extends Panel implements Updatable {
                         text += input.isKeyDown(GLFW_KEY_LEFT_SHIFT) || input.isKeyDown(GLFW_KEY_RIGHT_SHIFT) || Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)
                                 ? (char) key
                                 : Character.toLowerCase((char) key);
-                        System.out.println(text);
                     }
                 });
             } else {

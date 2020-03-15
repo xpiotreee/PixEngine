@@ -2,7 +2,7 @@ package com.piotreee.game.objects.tiles;
 
 import com.piotreee.game.packets.SetTilePacket;
 import com.piotreee.pixengine.math.Collider;
-import com.piotreee.pixengine.objects.Tile;
+import com.piotreee.pixengine.objects.tilemap.Tile;
 import com.piotreee.pixengine.render.Camera;
 import com.piotreee.pixengine.render.Shader;
 import com.piotreee.pixengine.render.Visual;

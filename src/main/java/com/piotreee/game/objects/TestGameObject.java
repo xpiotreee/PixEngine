@@ -32,9 +32,9 @@ public class TestGameObject implements GameObject {
     }
 
     public void updateFromPacket(UpdateGameObjectPacket p) {
-//        if (transform.position.distance(p.getPosition()) > 0.1f) {
+        if (transform.position.distance(p.getPosition()) > 0.1f) {
             transform.position.set(p.getPosition());
-//        }
+        }
 
         transform.setRotation(p.getRotation());
         this.getRigidbody().ifPresent(rb -> rb.setVelocity(p.getVelocity()));

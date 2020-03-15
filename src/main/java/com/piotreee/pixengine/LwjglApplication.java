@@ -22,7 +22,7 @@ public class LwjglApplication {
     private Window window;
     private GameScene currentScene;
     private int FPS;
-    private float scale = 96;
+    private float scale = 48;
     private Matrix4f view;
 
     private LwjglApplication() {

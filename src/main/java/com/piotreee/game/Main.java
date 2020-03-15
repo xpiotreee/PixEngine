@@ -12,11 +12,10 @@ import com.piotreee.game.server.GameServer;
 import com.piotreee.pixengine.LwjglApplication;
 import com.piotreee.pixengine.networking.Network;
 import com.piotreee.pixengine.objects.Registry;
-import com.piotreee.pixengine.objects.Tile;
+import com.piotreee.pixengine.objects.tilemap.TileMap;
 
 public class Main {
     public static Registry<TestGameObject> objectRegistry = new Registry<>();
-    public static Registry<Tile> tileRegistry = new Registry<>();
 
     public static void main(String[] args) {
         registerPackets();
@@ -40,6 +39,7 @@ public class Main {
         Network.packetRegistry.register(6, SetTilePacket.class);
         Network.packetRegistry.register(7, TileActionPacket.class);
         Network.packetRegistry.register(8, JoinPacket.class);
+        Network.packetRegistry.register(9, ChunkPacket.class);
     }
 
     private static void registerGameObjects() {
@@ -49,8 +49,8 @@ public class Main {
     }
 
     private static void registerTiles() {
-        tileRegistry.register(0, Grass.class);
-        tileRegistry.register(1, Dirt.class);
-        tileRegistry.register(2, Bricks.class);
+        TileMap.tileRegistry.register(0, Grass.class);
+        TileMap.tileRegistry.register(1, Dirt.class);
+        TileMap.tileRegistry.register(2, Bricks.class);
     }
 }

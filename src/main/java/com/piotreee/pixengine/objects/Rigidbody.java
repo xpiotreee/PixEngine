@@ -4,6 +4,8 @@ import com.piotreee.game.objects.TestGameObject;
 import com.piotreee.game.scenes.Game;
 import com.piotreee.game.server.GameServer;
 import com.piotreee.pixengine.math.Collider;
+import com.piotreee.pixengine.objects.tilemap.Tile;
+import com.piotreee.pixengine.objects.tilemap.TileMap;
 import org.joml.Vector2f;
 
 import java.util.Optional;
@@ -104,7 +106,7 @@ public class Rigidbody {
                         if (new Collider(oldPosition.add(0, fixedVelocity.y, new Vector2f()), collider.size).overlaps(tileCollider)) {
                             velocity.set(velocity.x, 0);
                         }
-//
+
                         velocity.mul(delta, position).add(oldPosition);
                     }
                 });

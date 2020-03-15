@@ -4,9 +4,12 @@ import com.piotreee.game.objects.Player;
 import com.piotreee.game.packets.*;
 import com.piotreee.game.server.GameServer;
 import com.piotreee.pixengine.networking.PacketListener;
-import com.piotreee.pixengine.objects.Tile;
+import com.piotreee.pixengine.objects.tilemap.Chunk;
+import com.piotreee.pixengine.objects.tilemap.Tile;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+
+import java.util.Optional;
 
 public class JoinListener extends PacketListener<JoinPacket> {
     private GameServer server;
@@ -28,9 +31,16 @@ public class JoinListener extends PacketListener<JoinPacket> {
         server.addGameObject(player);
         server.sendAll(new AddGameObjectPacket(player));
 
-        Tile[] tiles = server.getTileMap().getTiles();
-        for (int i = 0; i < tiles.length; i++) {
-            ctx.writeAndFlush(new SetTilePacket(tiles[i]).writeData().getData());
+        Optional[] chunks = server.getTileMap().getChunks(-2, -2, 2, 2);
+        for (int i = 0; i < chunks.length; i++) {
+            ((Optional<Chunk>) chunks[i]).ifPresent(chunk -> {
+                Tile[][] tiles = chunk.getTiles();
+                for (int x = 0; x < tiles.length; x++) {
+                    for (int y = 0; y < tiles[x].length; y++) {
+                        ctx.writeAndFlush(new SetTilePacket(tiles[x][y]).writeData().getData());
+                    }
+                }
+            });
         }
 
         ctx.writeAndFlush(new SetPlayerPacket(player.getId()).writeData().getData());

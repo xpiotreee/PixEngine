@@ -7,7 +7,7 @@ import com.piotreee.game.packets.SetTilePacket;
 import com.piotreee.game.packets.TileActionPacket;
 import com.piotreee.game.server.GameServer;
 import com.piotreee.pixengine.networking.PacketListener;
-import com.piotreee.pixengine.objects.Tile;
+import com.piotreee.pixengine.objects.tilemap.Tile;
 import io.netty.channel.ChannelHandlerContext;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;

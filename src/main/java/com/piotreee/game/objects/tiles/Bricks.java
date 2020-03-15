@@ -1,7 +1,7 @@
 package com.piotreee.game.objects.tiles;
 
 import com.piotreee.game.packets.SetTilePacket;
-import com.piotreee.pixengine.objects.Tile;
+import com.piotreee.pixengine.objects.tilemap.Tile;
 import com.piotreee.pixengine.render.Visual;
 import com.piotreee.pixengine.util.Resources;
 import org.joml.Vector2i;

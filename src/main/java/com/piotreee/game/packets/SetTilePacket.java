@@ -1,36 +1,34 @@
 package com.piotreee.game.packets;
 
 import com.piotreee.pixengine.networking.Packet;
-import com.piotreee.pixengine.objects.Tile;
+import com.piotreee.pixengine.objects.tilemap.Tile;
+import org.joml.Vector2i;
 
 import java.nio.ByteBuffer;
 
 public class SetTilePacket extends Packet {
     private int type;
-    private int x;
-    private int y;
+    private Vector2i position;
 
     public SetTilePacket(byte[] data) {
         super(data);
     }
 
-    public SetTilePacket(Tile tile) {
-        this(tile.getType(), tile.getX(), tile.getY());
-    }
-
-    public SetTilePacket(int type, int x, int y) {
+    public SetTilePacket(int type, Vector2i position) {
         this.id = 6;
         this.type = type;
-        this.x = x;
-        this.y = y;
+        this.position = position;
+    }
+
+    public SetTilePacket(Tile tile) {
+        this(tile.getType(), tile.getPosition());
     }
 
     @Override
     public ByteBuffer writeData(ByteBuffer buffer) {
         super.writeData(buffer);
         buffer.putInt(type);
-        buffer.putInt(x);
-        buffer.putInt(y);
+        writeVector2i(position);
         return buffer;
     }
 
@@ -38,8 +36,7 @@ public class SetTilePacket extends Packet {
     public void readData(ByteBuffer buffer) {
         super.readData(buffer);
         this.type = buffer.getInt();
-        this.x = buffer.getInt();
-        this.y = buffer.getInt();
+        this.position = readVector2i(buffer);
     }
 
     public int getType() {
@@ -51,21 +48,12 @@ public class SetTilePacket extends Packet {
         return this;
     }
 
-    public int getX() {
-        return x;
+    public Vector2i getPosition() {
+        return position;
     }
 
-    public SetTilePacket setX(int x) {
-        this.x = x;
-        return this;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public SetTilePacket setY(int y) {
-        this.y = y;
+    public SetTilePacket setPosition(Vector2i position) {
+        this.position = position;
         return this;
     }
 }
