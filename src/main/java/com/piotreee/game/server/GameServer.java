@@ -3,12 +3,14 @@ package com.piotreee.game.server;
 import com.piotreee.game.objects.Papierz;
 import com.piotreee.game.objects.Player;
 import com.piotreee.game.objects.TestGameObject;
+import com.piotreee.game.objects.map.Biomes;
 import com.piotreee.game.packets.RemoveGameObjectPacket;
 import com.piotreee.game.packets.UpdateGameObjectPacket;
 import com.piotreee.game.server.listeners.InputListener;
 import com.piotreee.game.server.listeners.JoinListener;
 import com.piotreee.game.server.listeners.TileActionListener;
 import com.piotreee.pixengine.networking.Server;
+import com.piotreee.pixengine.objects.tilemap.Generator;
 import com.piotreee.pixengine.objects.tilemap.TileMap;
 import io.netty.channel.Channel;
 
@@ -19,7 +21,7 @@ import java.util.List;
 public class GameServer extends Server {
     public static GameServer INSTANCE;
     public static int IDs = 0;
-    private TileMap tileMap = new TileMap(2, 2);
+    private TileMap tileMap = new TileMap(new Generator(new Biomes()), 8, 8);
     private HashMap<Channel, Player> players = new HashMap<>();
     private List<TestGameObject> gameObjects = new ArrayList<>();
     private int gameObjectsSize = 0;

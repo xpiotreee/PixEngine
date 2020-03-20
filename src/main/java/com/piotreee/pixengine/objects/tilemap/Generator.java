@@ -3,15 +3,16 @@ package com.piotreee.pixengine.objects.tilemap;
 import org.joml.Vector2i;
 
 public class Generator {
-    private BiomeAtlas biomeAtlas = new BiomeAtlas();
+    private BiomeAtlas biomeAtlas;
     private OpenSimplexNoise terrainNoise;
     private OpenSimplexNoise biomeNoise;
 
-    public Generator() {
-        this(0);
+    public Generator(BiomeAtlas biomeAtlas) {
+        this(biomeAtlas, 0);
     }
 
-    public Generator(long seed) {
+    public Generator(BiomeAtlas biomeAtlas, long seed) {
+        this.biomeAtlas = biomeAtlas;
         this.terrainNoise = new OpenSimplexNoise(seed);
         this.biomeNoise = new OpenSimplexNoise(seed + 1);
     }

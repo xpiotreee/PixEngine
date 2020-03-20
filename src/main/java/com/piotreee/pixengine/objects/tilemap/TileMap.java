@@ -13,13 +13,14 @@ import java.util.function.BiConsumer;
 
 public class TileMap {
     public static Registry<Tile> tileRegistry = new Registry<>();
-    private Generator generator = new Generator();
+    private Generator generator;
     private HashMap<Vector2i, Chunk> chunks = new HashMap<>();
 
     public TileMap() {
     }
 
-    public TileMap(int width, int height) {
+    public TileMap(Generator generator, int width, int height) {
+        this.generator = generator;
         generate(-width, -height, width, height);
     }
 
@@ -53,11 +54,11 @@ public class TileMap {
     }
 
     public Optional<Chunk> getChunkByPos(Vector2f position) {
-        return getChunkByPos(Math.round(position.x / 8f), Math.round(position.y / 8f));
+        return getChunkByPos((int) Math.floor(position.x / 8f), (int) Math.floor(position.y / 8f));
     }
 
     public Optional<Chunk> getChunkByPos(Vector2i position) {
-        return getChunkByPos(Math.round(position.x / 8f), Math.round(position.y / 8f));
+        return getChunkByPos((int) Math.floor(position.x / 8f), (int) Math.floor(position.y / 8f));
     }
 
     public Optional<Chunk> getChunkByPos(int x, int y) {
@@ -131,8 +132,8 @@ public class TileMap {
         return list.toArray(new Optional[]{});
     }
 
-    public Chunk createChunk(Vector2i chunk) {
-        return chunks.put(chunk, new Chunk(chunk));
+    public void createChunk(Vector2i chunk) {
+        chunks.put(chunk, new Chunk(chunk));
     }
 
     public void createChunk(int x, int y) {

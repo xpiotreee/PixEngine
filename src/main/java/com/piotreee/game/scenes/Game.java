@@ -17,7 +17,6 @@ import com.piotreee.pixengine.io.Window;
 import com.piotreee.pixengine.objects.GameScene;
 import com.piotreee.pixengine.objects.Updatable;
 import com.piotreee.pixengine.objects.tilemap.Chunk;
-import com.piotreee.pixengine.objects.tilemap.Tile;
 import com.piotreee.pixengine.objects.tilemap.TileMap;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -87,18 +86,13 @@ public class Game extends GameScene {
         int x = Math.round(position.x / 8f);
         int y = Math.round(position.y / 8f);
 
-        Optional[] chunks = tileMap.getChunks(x - 2, y - 2, x + 2, y + 2);
+        Optional[] chunks = tileMap.getChunks(x - 3, y - 3, x + 3, y + 3);
+
         for (int i = 0; i < chunks.length; i++) {
-            ((Optional<Chunk>) chunks[i]).ifPresentOrElse(chunk -> {
-                Tile[][] tiles = chunk.getTiles();
-                for (int tileX = 0; tileX < tiles.length; tileX++) {
-                    for (int tileY = 0; tileY < tiles[tileX].length; tileY++) {
-                        if (tiles[tileX][tileY] != null) {
-                            tiles[tileX][tileY].render(shader, camera, view);
-                        }
-                    }
-                }
-            }, () -> client.send(new ChunkPacket(new Vector2i())));
+            ((Optional<Chunk>) chunks[i]).ifPresentOrElse(
+                    chunk -> chunk.render(shader, camera, view),
+                    () -> client.send(new ChunkPacket(new Vector2i()))
+            );
         }
 
         super.render(view);

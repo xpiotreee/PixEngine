@@ -6,6 +6,7 @@ import com.piotreee.game.objects.TestGameObject;
 import com.piotreee.game.objects.tiles.Bricks;
 import com.piotreee.game.objects.tiles.Dirt;
 import com.piotreee.game.objects.tiles.Grass;
+import com.piotreee.game.objects.tiles.Sand;
 import com.piotreee.game.packets.*;
 import com.piotreee.game.scenes.MainMenu;
 import com.piotreee.game.server.GameServer;
@@ -52,5 +53,6 @@ public class Main {
         TileMap.tileRegistry.register(0, Grass.class);
         TileMap.tileRegistry.register(1, Dirt.class);
         TileMap.tileRegistry.register(2, Bricks.class);
+        TileMap.tileRegistry.register(3, Sand.class);
     }
 }

@@ -22,7 +22,7 @@ public class SetTileListener extends PacketListener<SetTilePacket> {
         tileMap.getChunk(tile).ifPresentOrElse(
                 chunk -> tileMap.setTile(tile),
                 () -> {
-                    tileMap.createChunk(Math.round(tile.getPosition().x / 8f), Math.round(tile.getPosition().y / 8f));
+                    tileMap.createChunk(tile.getPosition().x / 8, tile.getPosition().y / 8);
                     tileMap.setTile(tile);
                 }
         );
