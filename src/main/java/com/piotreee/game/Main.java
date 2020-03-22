@@ -3,10 +3,7 @@ package com.piotreee.game;
 import com.piotreee.game.objects.Papierz;
 import com.piotreee.game.objects.Player;
 import com.piotreee.game.objects.TestGameObject;
-import com.piotreee.game.objects.tiles.Bricks;
-import com.piotreee.game.objects.tiles.Dirt;
-import com.piotreee.game.objects.tiles.Grass;
-import com.piotreee.game.objects.tiles.Sand;
+import com.piotreee.game.objects.tiles.*;
 import com.piotreee.game.packets.*;
 import com.piotreee.game.scenes.MainMenu;
 import com.piotreee.game.server.GameServer;
@@ -54,5 +51,6 @@ public class Main {
         TileMap.tileRegistry.register(1, Dirt.class);
         TileMap.tileRegistry.register(2, Bricks.class);
         TileMap.tileRegistry.register(3, Sand.class);
+        TileMap.tileRegistry.register(4, Water.class);
     }
 }

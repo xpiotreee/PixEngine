@@ -89,9 +89,16 @@ public class Game extends GameScene {
         Optional[] chunks = tileMap.getChunks(x - 3, y - 3, x + 3, y + 3);
 
         for (int i = 0; i < chunks.length; i++) {
+            int finalI = i;
             ((Optional<Chunk>) chunks[i]).ifPresentOrElse(
                     chunk -> chunk.render(shader, camera, view),
-                    () -> client.send(new ChunkPacket(new Vector2i()))
+                    () -> {
+                        Vector2i chunkPos = new Vector2i(x + finalI / 6 - 3, y + finalI % 6 - 3);
+                        if (tileMap.getChunk(chunkPos).isEmpty()) {
+                            tileMap.createChunk(chunkPos);
+                            client.send(new ChunkPacket(chunkPos));
+                        }
+                    }
             );
         }
 

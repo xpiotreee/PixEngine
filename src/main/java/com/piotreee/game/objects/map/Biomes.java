@@ -8,7 +8,7 @@ import com.piotreee.pixengine.objects.tilemap.BiomeAtlas;
 public class Biomes implements BiomeAtlas {
     @Override
     public Biome getBiome(double value) {
-        if (value < 0.25 && value > -0.25) {
+        if (value > 0) {
             return Desert.INSTANCE;
         } else {
             return Forest.INSTANCE;

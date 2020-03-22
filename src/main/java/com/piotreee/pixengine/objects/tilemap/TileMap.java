@@ -27,18 +27,19 @@ public class TileMap {
     public void generate(int x, int y, int width, int height) {
         for (int i = x; i < width; i++) {
             for (int j = y; j < height; j++) {
-                Vector2i position = new Vector2i(i, j);
-                chunks.put(position, generator.genChunk(position));
+                genChunk(i, j);
             }
         }
     }
 
     public Chunk genChunk(int x, int y) {
-        return generator.genChunk(x, y);
+        return genChunk(new Vector2i(x, y));
     }
 
     public Chunk genChunk(Vector2i position) {
-        return generator.genChunk(position);
+        Chunk chunk = generator.genChunk(position);
+        chunks.put(position, chunk);
+        return chunk;
     }
 
     public Optional<Chunk> getChunk(int x, int y) {

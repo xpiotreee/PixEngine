@@ -6,6 +6,7 @@ import com.piotreee.game.objects.TestGameObject;
 import com.piotreee.game.objects.map.Biomes;
 import com.piotreee.game.packets.RemoveGameObjectPacket;
 import com.piotreee.game.packets.UpdateGameObjectPacket;
+import com.piotreee.game.server.listeners.ChunkListener;
 import com.piotreee.game.server.listeners.InputListener;
 import com.piotreee.game.server.listeners.JoinListener;
 import com.piotreee.game.server.listeners.TileActionListener;
@@ -21,7 +22,7 @@ import java.util.List;
 public class GameServer extends Server {
     public static GameServer INSTANCE;
     public static int IDs = 0;
-    private TileMap tileMap = new TileMap(new Generator(new Biomes()), 8, 8);
+    private TileMap tileMap = new TileMap(new Generator(new Biomes()), 6, 6);
     private HashMap<Channel, Player> players = new HashMap<>();
     private List<TestGameObject> gameObjects = new ArrayList<>();
     private int gameObjectsSize = 0;
@@ -36,8 +37,8 @@ public class GameServer extends Server {
         addListeners(
                 new InputListener(this),
                 new TileActionListener(this),
-                new JoinListener(this)
-//                new ChunkListener(this)
+                new JoinListener(this),
+                new ChunkListener(this)
         );
 
     }

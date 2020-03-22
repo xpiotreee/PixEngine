@@ -23,13 +23,13 @@ public class Generator {
 
     public Chunk genChunk(Vector2i position) {
         Chunk chunk = new Chunk(position);
-        Biome biome = biomeAtlas.getBiome(biomeNoise.eval(position.x / 1, position.y / 1));
+        Biome biome = biomeAtlas.getBiome(biomeNoise.eval(position.x / 24.0, position.y / 24.0));
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 try {
                     Vector2i tilePos = position.mul(8, new Vector2i()).add(x, y);
                     chunk.setTile(
-                            biome.getTile(terrainNoise.eval(tilePos.x / 8.0, tilePos.y / 8.0))
+                            biome.getTile(terrainNoise.eval(tilePos.x / 16.0, tilePos.y / 16.0))
                                     .getConstructor(Vector2i.class).newInstance(tilePos), x, y
                     );
                 } catch (Exception e) {
